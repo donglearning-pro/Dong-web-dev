@@ -10,17 +10,34 @@
 .main{
     margin-top: 100px;
 }
+.buttondiv{
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
 .btn{
+    margin: 0;
     margin-top: 20px;
-    text-align: center; 
+    background: #dfe1e5; 
+    border: 1px solid #cfd9de;
+    border-radius: 10px;
+    padding: 5px 10px;
 }
 .search{
-    width: 400px;
+    width: 500px;
     display: block;
     margin: 0 auto;
     margin-top: 20px;
+    margin-left: 480px;
 }
 .search input{
     width: 100%;
-    height: auto;
+    line-height: 24px;
+    border-radius: 24px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 30px;
+    padding-right: 30px;
+    border: 1px solid #dfe1e5;
+
 }
