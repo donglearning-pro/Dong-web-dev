@@ -1,0 +1,14 @@
+.video-container {
+    display: flex;
+    gap: 10px;
+}
+.video {
+    flex: 1;
+    max-width: 100%;
+    width: 200px;
+    height: auto;
+}
+.smart-bulb-description {
+    display: flex;
+    gap: 500px;
+}

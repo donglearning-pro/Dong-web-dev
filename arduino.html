@@ -1,16 +1,25 @@
 <!doctype html>
 <html>
     <head>
+        <link rel="stylesheet" href="arduinostyles.css">
         <title>Arduino</title>
     </head>
     <body>
         <div>
             <h2>Smart bulb</h2>
-            <video controls width="600">
-                <source src="smart_bulb.mp4" type="video/mp4" alt="smart bulb">
-                Your browser does not support the video tag.
-            </video>
+            <div class="video-container">
+                <video class="video" controls>
+                    <source src="Arduino materials\smart_bulb.mp4" type="video/mp4" alt="smart bulb">
+                    Your browser does not support the video tag.
+                </video>
+                <video class="video" controls>
+                    <source src="Arduino materials\bulb-light.mp4" type="video/mp4" alt="light bulb">
+                </video>
+            </div>
+            <div class="smart-bulb-description">
             <p>It's turned on when there's a noise nearby</p>
+            <p>It's supposed to turn on when there's no light around, but I did the opposite :)))</p>
+            </div>
         </div>
     </body>
 </html>
