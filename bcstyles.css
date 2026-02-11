@@ -9,14 +9,14 @@ body {
     width: 100%;
     max-width: 550px;
     margin: 200px 20px;
-    background-color: #8caaf5;
-    border: 2px dotted blue;
+    background-color: #ddebf8;
     display: flex;
     align-items: center;
     justify-content: flex-start;
     gap: 25px;
     padding: 30px;
     box-sizing: border-box;
+    border-bottom: 8px solid #decefe;
 }
 .card-photo {
     width: 180px;
