@@ -1,11 +1,16 @@
 body {
-    color: white;
-    background-image: url("/assets/universe.jpg");
+    background-image: url("/assets/Space.gif");
     background-size: cover;
-    margin: 100px;
     text-align: center;
     font-family: "Orbitron", sans-serif;
+    
+}
+.hero {
     font-size: 1.1rem;
+    margin: 100px;
+    color: white;
+;
+
 }
 .btn {
     background: white;
@@ -16,8 +21,16 @@ body {
     font-family: inherit;
 }
 .cta {
-    text-decoration: underline;
+    border-bottom: 4px solid white;
 }
 #img {
     width: 150px;
+}
+.term {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    background-color: white;
+    padding: 10px;
 }
