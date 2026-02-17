@@ -1,0 +1,18 @@
+.container {
+    max-width: 100%;
+    overflow: hidden;
+}
+video {
+    max-width: 80%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+}
+@media (max-width: 768px) {
+    video {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        object-fit: contain;
+    }
+}

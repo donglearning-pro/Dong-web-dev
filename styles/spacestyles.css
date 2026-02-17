@@ -3,7 +3,7 @@ body {
     background-size: cover;
     text-align: center;
     font-family: "Orbitron", sans-serif;
-    
+    margin: 0;
 }
 .hero {
     font-size: 1.1rem;
@@ -32,5 +32,5 @@ body {
     width: 100%;
     text-align: center;
     background-color: white;
-    padding: 10px;
+    padding: 10px;  
 }

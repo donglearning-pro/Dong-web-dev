@@ -1,14 +1,29 @@
 .video-container {
     display: flex;
+    flex-wrap: wrap;
     gap: 10px;
+    justify-content: space-between;
 }
-.video {
-    flex: 1;
-    max-width: 100%;
-    width: 200px;
+.video-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 48%;
+}
+.video-item video {
+    width: 100%;
     height: auto;
 }
-.smart-bulb-description {
-    display: flex;
-    gap: 500px;
+.video-item .description {
+    text-align: center;
+    margin-top: 10px;
+}
+@media (max-width: 768px) {
+    .video-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .video-item {
+        width: 100%;
+    }
 }

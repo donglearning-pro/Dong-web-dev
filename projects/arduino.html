@@ -3,23 +3,30 @@
     <head>
         <link rel="stylesheet" href="/styles/arduinostyles.css">
         <title>Arduino</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
-        <div>
+        <div class="container">
             <h2>Smart bulb</h2>
             <div class="video-container">
-                <video class="video" controls>
-                    <source src="/assets/Arduino-materials/smart_bulb.mp4" type="video/mp4" alt="smart bulb">
-                    Your browser does not support the video tag.
-                </video>
-                <video class="video" controls>
-                    <source src="/assets/Arduino-materials/bulb-light-small.mp4" type="video/mp4" alt="light bulb">
-                </video>
+                <div class="video-item">
+                    <video controls>
+                        <source src="/assets/Arduino-materials/smart_bulb.mp4" type="video/mp4" alt="smart bulb">
+                        Your browser does not support the video tag.
+                    </video>
+                    <div class="description">
+                        <p>It's turned on when there's a noise nearby</p>
+                    </div>
+                </div>
+                <div class="video-item">
+                    <video controls>
+                        <source src="/assets/Arduino-materials/bulb-light-small.mp4" type="video/mp4" alt="light bulb">
+                    </video>
+                    <div class="description">
+                        <p>It's supposed to turn on when there's no light around, but I did the opposite :)))</p>
+                    </div>
+                </div>
             </div>
-            <div class="smart-bulb-description">
-            <p>It's turned on when there's a noise nearby</p>
-            <p>It's supposed to turn on when there's no light around, but I did the opposite :)))</p>
-            </div>
-        </div>
+        </div>    
     </body>
 </html>
