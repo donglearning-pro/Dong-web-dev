@@ -1,14 +1,17 @@
+* {
+    box-sizing: border-box;
+}
 body {
     display: flex;
     justify-content: center;
     min-height: 100vh;
     margin: 0;
     background-color: #f4f4f4;
+    align-items: center;
 }
 .card {
-    width: 100%;
+    width: 90%;
     max-width: 550px;
-    margin: 200px 20px;
     background-color: #ddebf8;
     display: flex;
     align-items: center;

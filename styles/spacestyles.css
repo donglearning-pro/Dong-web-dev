@@ -1,16 +1,24 @@
 body {
     background-image: url("/assets/Space.gif");
     background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
     text-align: center;
     font-family: "Orbitron", sans-serif;
     margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow-x: hidden;
 }
 .hero {
     font-size: 1.1rem;
-    margin: 100px;
+    margin: 0 auto;
+    padding: 10px 10px;
     color: white;
-;
-
+}
+.hero h1 {
+    text-shadow: 5px 5px 5px black;
 }
 .btn {
     background: white;
@@ -19,6 +27,7 @@ body {
     font-size: 1rem;
     border: none;
     font-family: inherit;
+    margin: 5px;
 }
 .cta {
     border-bottom: 4px solid white;
@@ -27,10 +36,14 @@ body {
     width: 150px;
 }
 .term {
-    position: fixed;
-    bottom: 0;
+    margin-top: auto;
     width: 100%;
     text-align: center;
     background-color: white;
-    padding: 10px;  
+    padding: 15px 10px;
+    box-sizing: border-box;  
+}
+.term h3 {
+    margin: 0;
+    font-size: 1rem;
 }
