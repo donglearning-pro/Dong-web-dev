@@ -1,0 +1,14 @@
+* {
+    box-sizing: border-box;
+}
+body {
+    font-family: Happy Monkey, cursive;
+    text-align: center;
+    min-height: 100vh;
+}
+#bff-img {
+    width: 20%;
+    height: auto;
+    border-radius: 50%;
+    object-fit: cover;
+}
