@@ -5,10 +5,14 @@ body {
     font-family: Happy Monkey, cursive;
     text-align: center;
     min-height: 100vh;
+    background: #a2d2ff;
+    color: white;
+    text-shadow: 2px 2px 3px black;
 }
 #bff-img {
     width: 20%;
     height: auto;
     border-radius: 50%;
     object-fit: cover;
+    border: 2px solid #EFB0C9;
 }
