@@ -2,12 +2,15 @@
     box-sizing: border-box;
 }
 body {
+    display: flex;
+    flex-direction: column;
     font-family: Happy Monkey, cursive;
-    text-align: center;
+    align-items: center;
     min-height: 100vh;
     background: #a2d2ff;
     color: white;
     text-shadow: 2px 2px 3px black;
+    text-align: center;
 }
 #bff-img {
     width: 20%;
@@ -15,4 +18,47 @@ body {
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid #EFB0C9;
+}
+#bday-age {
+    background: #EFB0C9;
+    padding: 2px 5px;
+    border: 5px solid #EFB0C9;
+    border-radius: 3px;
+    margin-bottom: 5px;
+}
+#bday-date {
+    margin: 0;
+    background: #EFB0C9;
+    padding: 2px 5px;
+    border: 5px solid #EFB0C9;
+    border-radius: 3px;
+}
+.gift-section {
+    margin-top: 1.5rem;
+}
+.gift-title {
+    margin-bottom: 0;
+}
+.gift-hint {
+    margin-top: 0.5rem;
+}
+.gift-cover {
+    background-image: url("/assets/GIFt-materials/gift-cover.webp");
+    background-size: cover;
+    margin: 0 auto;
+    width: 60vw;
+    height: 60vw;
+    max-width: 400px;
+    max-height: 400px;
+    border: 3px solid white;
+    border-radius: 6px;
+}
+.gift-cover:hover {
+    background-image: url("/assets/GIFt-materials/Happy-Sesame-Street.gif");
+    background-size: cover;
+}
+@media (max-width: 768px) {
+    #bff-img {
+        width: 40%;
+    }
 }
