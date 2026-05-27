@@ -79,16 +79,19 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.setItem(`comments_${blogId}`, JSON.stringify(comments));
 
         // 2. 🚀 BẮN EMAIL THẦN TỐC VỀ ĐIỆN THOẠI CỦA ÔNG VỚI FETCH API
-        if (apiKeyInput && apiKeyInput.value !== "50f899d1-4758-4deb-bb72-4de7e16ff1ff") {
+        // SỬA LẠI DÒNG NÀY: Chỉ cần check xem apiKeyInput có giá trị là gửi luôn
+        if (apiKeyInput && apiKeyInput.value.trim() !== "") {
             // Tạo payload chuẩn cấu trúc của Web3Forms
+            // Thay thế đoạn formData cũ bằng đoạn này cho khỏi lỗi font email:
             const formData = new FormData();
             formData.append("access_key", apiKeyInput.value);
             formData.append("from_name", "Dong's Blog Notifier");
             formData.append("subject", `💬 Bình luận mới từ bài viết: ${blogId}`);
-            formData.append("Người gửi", `${name} (${email || 'Không để lại email'})`);
-            formData.append("Nội dung cảm nhận", content);
-            formData.append("Thời gian", dateStr);
 
+            // Sửa Key thành không dấu để Web3Forms render chuẩn format
+            formData.append("Nguoi_Gui", `${name} (${email || 'Không để lại email'})`);
+            formData.append("Noi_Dung_Cam_Nhan", content);
+            formData.append("Thoi_Gian", dateStr);
             // Gửi ngầm qua API
             fetch("https://api.web3forms.com/submit", {
                 method: "POST",
@@ -98,9 +101,11 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(data => {
                 if(data.success) {
                     console.log("Email thông báo đã gửi thành công!");
+                } else {
+                    console.error("Web3Forms báo lỗi:", data.message);
                 }
             })
-            .catch(error => console.error("Lỗi gửi email:", error));
+            .catch(error => console.error("Lỗi kết nối mạng:", error));
         }
 
         // Reset form và cập nhật lại giao diện hiển thị ngay tức thì
