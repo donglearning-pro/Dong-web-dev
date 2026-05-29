@@ -271,6 +271,40 @@ cv2.destroyAllWindows()
                 </table>
 
                 <p>Hai dự án này là những viên gạch nền tảng cực kỳ vững chắc: một bên rèn luyện cho tôi sự điềm tĩnh và tư duy logic của một <strong>Nhà Khoa học Dữ liệu</strong>, một bên cung cấp kỹ năng "thực chiến" và độ nhạy bén của một <strong>Kỹ sư AI/Computer Vision</strong>.</p>
+            
+                <div class="share-container">
+                    <span class="share-text">Nếu bạn thấy bài viết này hữu ích, hãy chia sẻ nó nhé!</span>
+                    <button class="btn-copy-link" id="copyLinkBtn" onclick="copyArticleLink()">
+                        <span>🔗</span> <span id="btnText">Copy Article Link</span>
+                    </button>
+                </div>
+
+                <section class="comment-section">
+                    <h3>💬 Để lại bình luận hoặc cảm nhận</h3>
+                    <p class="comment-subtitle">Ý kiến của bạn là nguồn động lực rất lớn để tôi viết tiếp những bài blog chất lượng hơn!</p>
+                    
+                    <form id="commentForm" class="comment-form">
+                        <input type="hidden" id="web3FormsKey" value="50f899d1-4758-4deb-bb72-4de7e16ff1ff">
+                        <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
+                        <div class="form-row">
+                            <input type="text" id="commentName" placeholder="Tên của bạn (Bắt buộc) *" required>
+                            <input type="email" id="commentEmail" placeholder="Email của bạn (Sẽ được bảo mật)">
+                        </div>
+                        <div class="form-row">
+                            <textarea id="commentContent" rows="4" placeholder="Chia sẻ cảm nghĩ, câu hỏi hoặc lời nhắn của bạn tại đây... *" required></textarea>
+                        </div>
+                        <button type="submit" class="btn-submit-comment">
+                            <span>🚀</span> Gửi cảm nhận
+                        </button>
+                        <div class="h-captcha" data-captcha="true"></div>
+                    </form>
+                    
+                    <div class="comments-container">
+                        <h4>Cộng đồng thảo luận (<span id="commentCount">0</span>)</h4>
+                        <div id="commentsList" class="comments-list">
+                            </div>
+                    </div>
+                </section>
             </article>
         </main>
 
@@ -280,5 +314,7 @@ cv2.destroyAllWindows()
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+        <script src="../script/blog.js"></script>
+        <script src="https://web3forms.com/client/script.js" async defer></script>
     </body>
 </html>

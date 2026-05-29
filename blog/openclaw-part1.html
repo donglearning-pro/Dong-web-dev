@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Beyond Chatbots: Hành Trình Vượt "Kiếp Nạn" Visa Ảo Và Triển Khai Trợ Lý AI Đa Năng OpenClaw Trên AWS (Phần 1) — Dong's Blog</title>
+        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="../styles/blogstyles.css">
+        <style>
+            /* Style bổ sung riêng cho bài viết này */
+            .article-container { max-width: 800px; margin: 0 auto; padding: 40px 24px; }
+            .article-header { text-align: center; margin-bottom: 40px; }
+            .article-header h1 { font-size: 2.5rem; font-weight: 800; color: var(--text-main); margin: 20px 0; line-height: 1.3; }
+            .article-content h2 { font-size: 1.8rem; margin: 40px 0 20px; color: var(--text-main); border-bottom: 2px solid #f3f4f6; padding-bottom: 10px; }
+            .article-content h3 { font-size: 1.4rem; margin: 30px 0 15px; color: var(--accent-primary); font-weight: 700; }
+            .article-content p, .article-content li { font-size: 1.1rem; color: #374151; margin-bottom: 18px; line-height: 1.8; }
+            .article-content ul, .article-content ol { padding-left: 24px; margin-bottom: 24px; }
+            .article-content li { margin-bottom: 10px; }
+            
+            /* Định dạng inline-code cho các câu lệnh ngắn */
+            .article-content code { background-color: #f1f5f9; color: #0f172a; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 0.95rem; }
+            
+            /* Định dạng khối code block */
+            .code-block-wrapper { background: #1e293b; border-radius: 8px; padding: 16px; margin: 20px 0; overflow-x: auto; box-shadow: var(--shadow-sm); }
+            .code-block-wrapper pre { margin: 0; font-family: monospace; font-size: 0.95rem; color: #f8fafc; line-height: 1.5; }
+            
+            .media-block { margin: 35px 0; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-md); background: #f9fafb; text-align: center; border: 1px solid #e5e7eb; }
+            .media-caption { padding: 12px; font-size: 0.9rem; color: var(--text-muted); font-style: italic; border-top: 1px solid #f3f4f6; }
+            
+            /* Responsive Video Wrapper */
+            .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000; }
+            .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+
+            .highlight-quote { font-size: 1.25rem; font-weight: 600; color: var(--accent-primary); border-left: 4px solid var(--accent-primary); padding-left: 20px; margin: 30px 0; font-style: italic; line-height: 1.6; }
+            .teaser-box { background: rgba(16, 185, 129, 0.05); border: 1px dashed var(--color-life); border-radius: 12px; padding: 24px; margin-top: 40px; }
+            .teaser-box h4 { color: var(--color-life); font-size: 1.2rem; font-weight: 700; margin-bottom: 10px; }
+        </style>
+    </head>
+    <body>
+        
+        <header class="blog-navbar">
+            <div class="nav-container">
+                <div class="blog-logo">
+                    <a href="../index.html">Dong<span>.Blog</span></a>
+                </div>
+                <nav class="blog-nav-links">
+                    <a href="index.html">← Back to Blog</a>
+                </nav>
+            </div>
+        </header>
+
+        <main class="article-container">
+            <header class="article-header">
+                <span class="tag tag-tech">Tech & AI Project</span>
+                <span class="read-time">May 2026 • 10 min read</span>
+                <h1>Beyond Chatbots: Hành Trình Vượt "Kiếp Nạn" Visa Ảo Và Triển Khai Trợ Lý AI Đa Năng OpenClaw Trên AWS (Phần 1)</h1>
+                <p style="color: var(--text-muted); font-size: 1.1rem;">Khi ChatGPT hay Gemini dần trở nên quá quen thuộc, kỷ nguyên của các AI Agent tự trị (Autonomous Agents) chính là điểm đến tiếp theo. Câu chuyện về một khám phá đầy phấn khích, những bài học xương máu về thẻ Visa ảo, và cẩm nang hướng dẫn chi tiết từng bước đặt nền móng cho một trợ lý AI toàn năng chạy biệt lập trên đám mây AWS.</p>
+            </header>
+
+            <article class="article-content">
+                <p>Trong lúc mày mò tìm hiểu về những công nghệ mới nhất trong làn sóng trí tuệ nhân tạo, tôi vô tình va phải một dự án mã nguồn mở có cái tên cực kỳ ấn tượng: <strong>OpenClaw</strong>. Khác hoàn toàn với những mô hình chatbot thông thường mà chúng ta vẫn nói chuyện hàng ngày, OpenClaw ngay lập tức hớp hồn tôi bởi một tư duy thiết kế mang tính tương lai — tư duy của một <strong>AI Agent (Tác tử AI) thực thụ</strong>.</p>
+
+                <h2>OpenClaw Là Gì? Vì Sao Nó Lại Gây Ấn Tượng Mạnh?</h2>
+                <p>Nhiều người thường nhầm lẫn các công cụ hỗ trợ AI với một mô hình ngôn ngữ lớn (LLM). Nhưng không, bản thân <a href="https://openclaw.ai/" target="_blank" rel="noopener">OpenClaw</a> không phải là một LLM như ChatGPT hay Gemini. Nó chính xác là một <strong>bộ khung (framework) đa năng "đủ tay đủ chân"</strong>, sở hữu sẵn các kết nối hệ thống, công cụ tác vụ và vô số kỹ năng (skills). Thứ duy nhất nó thiếu là một "bộ não" — chính là các mô hình LLM mà chúng ta sẽ tích hợp vào sau đó.</p>
+                <p>Điều khiến tôi ấn tượng mạnh nhất ở OpenClaw chính là khả năng vận hành hoàn toàn <strong>Local và Private</strong>. Nó sở hữu những đặc quyền tối thượng mà các chatbot thương mại không bao giờ có: khả năng tìm kiếm sâu, truy cập, đọc hiểu, chỉnh sửa file, can thiệp vào cấu trúc thư mục, hệ thống của máy chủ và thậm chí là tự chỉnh sửa chính mã nguồn của nó theo yêu cầu của người dùng. Sức mạnh này mở ra những tiềm năng không giới hạn, nhưng đi kèm với đó là một nỗi lo không hề nhỏ.</p>
+
+                <p class="highlight-quote">"Quyền lực càng cao, trách nhiệm càng lớn. Việc giao toàn quyền kiểm soát hệ thống file cho một AI nghịch ngợm trên chính chiếc laptop cá nhân chẳng khác nào một canh bạc!"</p>
+
+                <h2>Chiến Lược VPS: Phòng Bệnh Hơn Chữa Bệnh</h2>
+                <p>Sau nhiều công đoạn nghiên cứu, tôi nhận ra việc cài đặt trực tiếp OpenClaw lên máy cá nhân tiềm ẩn quá nhiều rủi ro. Chỉ cần một câu lệnh cấu hình lơ mơ hay một kịch bản AI chạy sai hướng, hệ điều hành của tôi có thể "bay màu" hay phải cài lại Win trong tích tắc. Đó là chưa kể đến các vấn đề bảo mật nếu hệ thống bị hack từ bên ngoài.</p>
+                <p>Để thoải mái thử nghiệm, đập phá mà không lo sập nguồn hay hỏng laptop, tôi quyết định chọn phương án tối ưu nhất: <strong>Triển khai OpenClaw trên Virtual Private Server (VPS)</strong>. Nếu có sự cố, tôi chỉ cần xóa instance đi và tạo lại trong một nốt nhạc. Thế nhưng, kế hoạch vạch ra hoàn hảo bao nhiêu thì tôi lại vấp ngã ngay từ bước... thanh toán bấy nhiêu.</p>
+
+                <h2>"Kiếp Nạn" Visa Ảo: Bài Học Đắt Giá Về Thẻ Vật Lý</h2>
+                <p>Tôi hào hứng mở một chiếc thẻ Visa ảo (Virtual Card) trên ứng dụng ngân hàng, nạp tiền vào đầy đủ và bắt đầu đi "gõ cửa" các ông lớn Cloud đám mây. Mục tiêu đầu tiên là Oracle Cloud — nơi nổi tiếng hào phóng khi cho người dùng sử dụng miễn phí nhiều máy chủ cấu hình rất cao (Always Free).</p>
+                <p>Nhưng hệ thống từ refuse thẳng thừng! Oracle xem chiếc thẻ Visa ảo của tôi như một dạng thẻ trả trước (Prepaid), trong khi thực tế định danh của nó là thẻ ghi nợ (Debit). Không bỏ cuộc, tôi tiếp tục càn quét qua Microsoft Azure rồi Google Cloud Platform (GCP). Kết quả nhận lại là một sự ghẻ lạnh đồng loạt; xem ra công ty nào cũng từ chối định dạng thẻ này.</p>
+                <p>Một kinh nghiệm xương máu cho lần sau: <strong>Nếu có ý định làm lab hay đăng ký dịch vụ Cloud quốc tế, hãy ra ngân hàng mở ngay một chiếc thẻ Visa/Mastercard VẬT LÝ</strong>. Đừng tốn thời gian với thẻ ảo kẻo lại chuốc lấy sự vỡ mộng như tôi.</p>
+                <p>Khi đã cận kề ý định bỏ cuộc, tôi thử vận may lần cuối với <strong>AWS (Amazon Web Services)</strong>. Thật may mắn, ông lớn này đã chấp nhận chiếc thẻ Visa ảo của tôi, cung cấp ngay một instance với cấu hình lý tưởng <strong>2vCPU, 4GiB Memory</strong> kèm theo $200 free credit để thỏa sức vọc vạch.</p>
+
+                ---
+
+                <h2>Cẩm Nang Triển Khai Hệ Thống Từng Bước Chi Tiết</h2>
+                <p>Dưới đây là tài liệu chi tiết từng bước một do tôi tổng hợp lại từ toàn bộ quá trình triển khai dự án này, đi từ lúc vừa tạo xong tài khoản AWS cho đến khi con Bot Telegram hoạt động trơn tru qua OpenClaw:</p>
+
+                <h3>Bước 1: Tạo máy chủ (EC2 Instance) trên AWS</h3>
+                <ol>
+                    <li>Đăng nhập vào <strong>AWS Management Console</strong>.</li>
+                    <li>Tìm kiếm dịch vụ <strong>EC2</strong> và nhấn <strong>Launch Instance</strong> (Tạo máy ảo mới).</li>
+                    <li><strong>Cấu hình máy ảo:</strong>
+                        <ul>
+                            <li><strong>Name:</strong> Đặt tên tùy ý (ví dụ: <code>openclaw-server</code>).</li>
+                            <li><strong>OS (Hệ điều hành):</strong> Chọn <code>Ubuntu</code> (Phiên bản LTS mới nhất, ví dụ: Ubuntu 24.04 hoặc 22.04) để chạy dòng lệnh ổn định nhất.</li>
+                            <li><strong>Instance type:</strong> Chọn <code>t2.micro</code> hoặc <code>t3.micro</code> (nằm trong gói Free Tier miễn phí 750 giờ/tháng).</li>
+                        </ul>
+                    </li>
+                    <li><strong>Tạo Key Pair (Khóa bí mật):</strong>
+                        <ul>
+                            <li>Nhấn <strong>Create new key pair</strong>.</li>
+                            <li>Đặt tên key (ví dụ: <code>openclaw</code>), chọn định dạng <code>.pem</code>.</li>
+                            <li>Tải về và lưu file này vào một thư mục an toàn trên máy tính Windows của bạn (ví dụ: <code>D:\Dong\openclaw.pem</code>).</li>
+                        </ul>
+                    </li>
+                    <li><strong>Cấu hình Tường lửa (Network settings - Security Group):</strong>
+                        <ul>
+                            <li>Tích chọn <strong>Allow SSH traffic from Anywhere</strong> (để bạn có thể remote điều khiển từ nhà).</li>
+                            <li>Nhấn <strong>Launch Instance</strong> để khởi chạy máy chủ. Sau vài phút, hãy copy lấy địa chỉ <strong>Public IP</strong> của máy (ví dụ: <code>13.250.xx.xx</code>).</li>
+                        </ul>
+                    </li>
+                </ol>
+
+                <div class="media-block">
+                    <div class="video-wrapper">
+                        <iframe src="https://www.youtube.com/embed/2zeoNC4cdTA?si=WP7ePRx6FlkK7_kW" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                    <div class="media-caption">Tài liệu tham khảo: Video hướng dẫn "How to Launch an EC2 instance?" của Rahul Wagh cho ai dùng AWS làm máy chủ.</div>
+                </div>
+
+                <h3>Bước 2: Tạo Bot và lấy API Token trên Telegram</h3>
+                <ol>
+                    <li>Mở ứng dụng Telegram trên điện thoại hoặc máy tính.</li>
+                    <li>Tìm kiếm tài khoản chính thức <strong>@BotFather</strong> (có tích xanh xác minh).</li>
+                    <li>Nhắn tin lệnh: <code>/newbot</code>.</li>
+                    <li>Làm theo hướng dẫn của BotFather:
+                        <ul>
+                            <li>Nhập Tên hiển thị cho Bot (ví dụ: <code>My Dev Bot</code>).</li>
+                            <li>Nhập Username cho Bot (bắt buộc phải kết thúc bằng chữ <em>bot</em>, ví dụ: <code>dong_dev_bot</code>).</li>
+                        </ul>
+                    </li>
+                    <li>Sau khi tạo xong, BotFather sẽ gửi cho bạn một chuỗi <strong>HTTP API Token</strong> (Dạng như: <code>738291023:AAFlkdjI...</code>). Hãy copy và lưu chuỗi này lại cẩn thận.</li>
+                </ol>
+
+                <h3>Bước 3: Cài đặt Tailscale để kết nối bảo mật</h3>
+                <p>Để kết nối vào Web Dashboard của OpenClaw một cách an toàn mà không cần mở cổng công khai ra Internet (tránh bị quét IP và hack hệ thống), chúng ta sẽ dùng mạng nội bộ ảo Tailscale:</p>
+                <ol>
+                    <li>Truy cập trang chủ Tailscale, tạo tài khoản miễn phí.</li>
+                    <li>Tải và cài đặt ứng dụng <strong>Tailscale</strong> lên máy tính Windows cá nhân ở nhà.</li>
+                    <li>Đăng nhập tài khoản Tailscale trên Windows và bật trạng thái sang <strong>Connected</strong>.</li>
+                </ol>
+
+                <h3>Bước 4: Kết nối vào AWS và cài đặt OpenClaw</h3>
+                <ol>
+                    <li>Mở công cụ <strong>PowerShell</strong> trên Windows lên.</li>
+                    <li>Gõ lệnh kết nối SSH vào máy chủ AWS bằng file key <code>.pem</code> đã tải ở Bước 1 (hãy thay thế bằng đường dẫn file và IP thực tế của bạn):
+                        <div class="code-block-wrapper">
+                            <pre>ssh -i "D:\Dong\openclaw.pem" ubuntu@13.250.xx.xx</pre>
+                        </div>
+                    </li>
+                    <li>Khi hệ thống hỏi <code>Are you sure you want to continue connecting?</code>, gõ <code>yes</code> rồi nhấn Enter.</li>
+                    <li><strong>Cài đặt các công cụ nền tảng (Node.js & PM2):</strong> Chạy liên tiếp các dòng lệnh sau trong terminal Ubuntu để thiết lập môi trường chạy ổn định:
+                        <div class="code-block-wrapper">
+                            <pre>sudo apt update && sudo apt upgrade -y
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt install -y nodejs
+sudo npm install pm2 -g</pre>
+                        </div>
+                    </li>
+                    <li><strong>Tiến hành cài đặt OpenClaw toàn cục:</strong>
+                        <div class="code-block-wrapper">
+                            <pre>npm install -g openclaw</pre>
+                        </div>
+                    </li>
+                </ol>
+
+                <div class="media-block">
+                    <div class="video-wrapper">
+                        <iframe src="https://www.youtube.com/embed/tnsrnsy_Lus?si=Zuop7Ecxg7e6VT5V" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                    <div class="media-caption">Tài liệu tham khảo: Video của Tech With Tim về cách setup OpenClaw an toàn và tư duy cô lập môi trường.</div>
+                </div>
+
+                <h3>Bước 5: Cấu hình OpenClaw kết nối Telegram & Gemini</h3>
+                <ol>
+                    <li>Trên terminal AWS đang kết nối, gõ lệnh sau để gọi trình cấu hình hệ thống:
+                        <div class="code-block-wrapper">
+                            <pre>openclaw configure</pre>
+                        </div>
+                    </li>
+                    <li>Trình cấu hình trực quan sẽ hiện ra, bạn nhấn Enter và lần lượt điền các thông số:
+                        <ul>
+                            <li><strong>Provider/Model:</strong> Chọn <code>Google Gemini</code> (ví dụ model: <code>gemini-1.5-flash</code>).</li>
+                            <li><strong>API Key:</strong> Dán mã API Key lấy từ Google AI Studio của bạn vào.</li>
+                            <li><strong>Telegram Bot Token:</strong> Dán chuỗi Token mà @BotFather đã cấp ở Bước 2.</li>
+                            <li><strong>Gateway bind mode:</strong> Chọn <code>Loopback (Local only) (Bind to 127.0.0.1)</code>. Đây là bước cực kỳ quan trọng để thiết lập cổng ngầm bảo mật, chặn mọi truy cập trực tiếp từ bên ngoài IP công cộng.</li>
+                            <li><strong>Gateway auth:</strong> Chọn <code>Token (Recommended default)</code>.</li>
+                        </ul>
+                    </li>
+                    <li>Tiếp tục nhấn Enter cho các mục tùy chọn còn lại cho đến khi màn hình hiện dòng chữ màu đỏ thông báo: <code>Configure complete.</code>.</li>
+                </ol>
+
+                <h3>Bước 6: Kích hoạt cài đặt chạy ngầm (24/7)</h3>
+                <p>Để con Bot luôn luôn túc trực trực tuyến kể cả khi bạn tắt máy tính cá nhân ở nhà, chúng ta dùng PM2 để quản lý vòng đời và chạy ngầm OpenClaw trên AWS:</p>
+                <ol>
+                    <li>Khởi chạy tác vụ bằng lệnh:
+                        <div class="code-block-wrapper">
+                            <pre>pm2 start openclaw --name "telegram-bot" -- gateway run</pre>
+                        </div>
+                    </li>
+                    <li>Lưu lại cấu hình trạng thái để tự động bật lại nếu server bị restart:
+                        <div class="code-block-wrapper">
+                            <pre>pm2 save
+pm2 startup</pre>
+                        </div>
+                    </li>
+                    <li>Gõ lệnh <code>openclaw dashboard</code> để kiểm tra trạng thái hoạt động hiện tại và hãy **copy lại chuỗi mã Token đăng nhập** hiển thị trên màn hình (ví dụ: <code>c987c36a3efe...</code>).</li>
+                </ol>
+
+                <h3>Bước 7: Cài đặt Tailscale trên AWS và thiết lập SSH Tunnel tại nhà</h3>
+                <ol>
+                    <li><strong>Cài Tailscale lên AWS:</strong> Chạy lệnh sau ngay tại terminal AWS:
+                        <div class="code-block-wrapper">
+                            <pre>curl -fsSL https://tailscale.com/install.sh | sh
+sudo tailscale up</pre>
+                        </div>
+                        <em>Hệ thống sẽ cung cấp một đường link xác thực, hãy click vào link đó để đăng nhập cùng tài khoản Tailscale ông đã đăng ký ở Bước 3.</em>
+                    </li>
+                    <li>Sau khi kết nối thành công, gõ lệnh <code>ip addr show tailscale0</code> (hoặc vào trang quản trị web của Tailscale) để lấy **IP nội bộ Tailscale của máy AWS** (Dạng dải số: <code>100.67.xx.xx</code>).</li>
+                    <li><strong>Mở SSH Tunnel trên Windows:</strong>
+                        <ul>
+                            <li>Tắt cửa sổ terminal kết nối AWS cũ đi.</li>
+                            <li>Mở một cửa sổ <strong>PowerShell hoàn toàn mới trên Windows</strong> và gõ lệnh thiết lập "đường ống ngầm" bảo mật kết nối trực tiếp cổng Dashboard (thay thế bằng IP Tailscale vừa lấy):
+                                <div class="code-block-wrapper">
+                                    <pre>ssh -i "D:\Dong\openclaw.pem" -N -L 18789:127.0.0.1:18789 ubuntu@100.67.xx.xx</pre>
+                                </div>
+                            </li>
+                            <li><em>Lưu ý quan trọng: Giữ nguyên cửa sổ PowerShell này đứng im, không được tắt nó đi trong suốt quá trình sử dụng Dashboard.</em></li>
+                        </ul>
+                    </li>
+                </ol>
+
+                <h3>Bước 8: Hưởng thụ thành quả</h3>
+                <ol>
+                    <li><strong>Vào giao diện quản lý (Dashboard):</strong> Mở trình duyệt Chrome trên máy Windows, truy cập vào địa chỉ: <a href="http://localhost:18789/" target="_blank">http://localhost:18789/</a></li>
+                    <li>Dán mã Token bảo mật lấy được ở Bước 6 vào để đăng nhập. Tại giao diện này, bạn có thể chỉnh sửa tính cách của Bot, theo dõi logs hệ thống và lịch sử chat.</li>
+                    <li><strong>Chat thử với Bot:</strong> Mở ứng dụng Telegram lên, tìm đúng tên Username con Bot của bạn (ví dụ: <code>@dong_dev_bot</code>) và gõ <em>"Chào bạn"</em>. Con Bot lúc này sẽ lập tức kết nối thông qua OpenClaw trên AWS, gửi dữ liệu đến bộ não trí tuệ nhân tạo Gemini và phản hồi lại bạn chỉ trong tích tắc!</li>
+                </ol>
+
+                <div class="media-block">
+                    <div class="video-wrapper">
+                        <iframe src="https://www.youtube.com/embed/dlz9JS7jRDo?si=-6qH6l8wMu0V6thX" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                    <div class="media-caption">Nhật ký dự án: Video ghi lại hành trình từ lúc bắt đầu configure để chuẩn bị launch instance, trải qua bao kiếp nạn đến lúc thành công tạo con bot đầu tiên trên Telegram.</div>
+                </div>
+
+                <h2>Lời Kết & Chờ Đón Phần 2</h2>
+                <p>Thành thật mà nói, đây mới chỉ là những viên gạch móng đầu tiên của dự án. Hiện tại con bot Telegram mới chỉ đứng ở bước kết nối cơ bản, chưa được "bơm máu" tích hợp chuyên sâu, và tôi cũng chưa nạp thêm kỹ năng (skills) hay áp dụng bất kỳ kịch bản tự trị nâng cao nào cho nó.</p>
+
+                <div class="teaser-box">
+                    <h4>Cuộc vui chỉ mới bắt đầu... 🤖</h4>
+                    <p>Trong bài viết tiếp theo (Phần 2), tôi sẽ tiến hành những bước kỹ thuật chuyên sâu và thú vị nhất:</p>
+                    <ul>
+                        <li><strong>Đấu nối dây điện nâng cao:</strong> Tối ưu hóa các luồng xử lý dữ liệu phức tạp giữa Bot Telegram và lõi OpenClaw trên AWS.</li>
+                        <li><strong>Thử nghiệm bộ não (LLM):</strong> Thử nghiệm chọn lựa và hoán đổi các model mã nguồn mở tối ưu nhất để nạp vào hệ thống.</li>
+                        <li><strong>Kích hoạt Kỹ năng (Skills):</strong> Ra lệnh cho con bot tự lục tìm, chỉnh sửa file trên server thông qua các dòng chat chat đơn giản.</li>
+                    </ul>
+                    <p style="margin-bottom: 0; font-weight: 600; color: var(--color-life);">Hãy nhấn Bookmark trang blog để không bỏ lỡ khoảnh khắc chúng ta chính thức "thổi hồn" kích hoạt toàn bộ quyền năng cho trợ lý AI này trong bài viết sắp tới nhé!</p>
+                </div>
+
+                <div class="share-container">
+                    <span class="share-text">Nếu bạn thấy hành trình này thú vị, hãy chia sẻ nó nhé!</span>
+                    <button class="btn-copy-link" id="copyLinkBtn" onclick="copyArticleLink()">
+                        <span>🔗</span> <span id="btnText">Copy Article Link</span>
+                    </button>
+                </div>
+
+                <section class="comment-section">
+                    <h3>💬 Để lại bình luận hoặc cảm nhận</h3>
+                    <p class="comment-subtitle">Ý kiến của bạn là nguồn động lực rất lớn để tôi viết tiếp những bài blog chất lượng hơn!</p>
+                    
+                    <form id="commentForm" class="comment-form">
+                        <input type="hidden" id="web3FormsKey" value="50f899d1-4758-4deb-bb72-4de7e16ff1ff">
+                        <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
+                        <div class="form-row">
+                            <input type="text" id="commentName" placeholder="Tên của bạn (Bắt buộc) *" required>
+                            <input type="email" id="commentEmail" placeholder="Email của bạn (Sẽ được bảo mật)">
+                        </div>
+                        <div class="form-row">
+                            <textarea id="commentContent" rows="4" placeholder="Chia sẻ cảm nghĩ, câu hỏi hoặc lời nhắn của bạn tại đây... *" required></textarea>
+                        </div>
+                        <button type="submit" class="btn-submit-comment">
+                            <span>🚀</span> Gửi cảm nhận
+                        </button>
+                        <div class="h-captcha" data-captcha="true"></div>
+                    </form>
+
+                    <div class="comments-container">
+                        <h4>Cộng đồng thảo luận (<span id="commentCount">0</span>)</h4>
+                        <div id="commentsList" class="comments-list"></div>
+                    </div>
+                </section>
+            </article>
+        </main>
+
+        <footer class="blog-footer">
+            <p>© 2026 DongDev Notes. Crafted for sharing insights.</p>
+        </footer>
+        <script src="../script/blog.js"></script>
+        <script src="https://web3forms.com/client/script.js" async defer></script>
+    </body>
+</html>

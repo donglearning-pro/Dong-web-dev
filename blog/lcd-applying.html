@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Bits, Bytes, and Heartbeats: Hành Trình Lần Đầu Khám Phá Màn Hình LCD I2C Với Arduino — Dong's Blog</title>
+        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="../styles/blogstyles.css">
+        <style>
+            /* Style đồng bộ và sửa đổi theo feedback của ông */
+            .article-container { max-width: 800px; margin: 0 auto; padding: 40px 24px; }
+            .article-header { text-align: center; margin-bottom: 40px; }
+            
+            /* Sửa đổi font chữ tiêu đề theo ảnh image_00e060.png */
+            .article-header h1 { 
+                font-family: 'Plus Jakarta Sans', sans-serif;
+                font-size: 2.6rem; 
+                font-weight: 800; 
+                color: #111827; 
+                margin: 24px 0 16px 0; 
+                line-height: 1.25;
+                letter-spacing: -0.02em;
+                text-align: center;
+            }
+            .article-header .date-read {
+                font-size: 0.95rem;
+                color: #6b7280;
+                margin-bottom: 8px;
+                display: block;
+            }
+
+            /* Sửa đổi tag thành ARDUINO & IOT theo ảnh image_00dd01.png */
+            .tag-arduino-iot {
+                background-color: #e0f2fe;
+                color: #0284c7;
+                font-family: 'Plus Jakarta Sans', sans-serif;
+                font-size: 0.85rem;
+                font-weight: 700;
+                padding: 6px 16px;
+                border-radius: 20px;
+                display: inline-block;
+                letter-spacing: 0.05em;
+                text-transform: uppercase;
+            }
+
+            .article-content h2 { font-size: 1.8rem; margin: 40px 0 20px; color: #111827; border-bottom: 2px solid #f3f4f6; padding-bottom: 10px; font-weight: 700; }
+            .article-content h3 { font-size: 1.4rem; margin: 30px 0 15px; color: #0284c7; font-weight: 700; }
+            .article-content p, .article-content li { font-size: 1.1rem; color: #374151; margin-bottom: 18px; line-height: 1.8; }
+            .article-content ul, .article-content ol { padding-left: 24px; margin-bottom: 24px; }
+            .article-content li { margin-bottom: 10px; }
+            
+            /* Tinh chỉnh hộp chứa code của Prism để bo góc mượt mà */
+            pre[class*="language-"] {
+                border-radius: 8px;
+                margin: 24px 0;
+                box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            }
+            
+            .media-block { margin: 35px 0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); background: #f9fafb; text-align: center; border: 1px solid #e5e7eb; }
+            .media-block img { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+            .media-block video { max-width: 100%; display: block; margin: 0 auto; background: #000; }
+            .media-caption { padding: 12px; font-size: 0.9rem; color: #6b7280; font-style: italic; border-top: 1px solid #f3f4f6; }
+            .highlight-quote { font-size: 1.25rem; font-weight: 600; color: #dc2626; border-left: 4px solid #dc2626; padding-left: 20px; margin: 30px 0; font-style: italic; line-height: 1.6; }
+            .teaser-box { background: rgba(2, 132, 199, 0.05); border: 1px dashed #0284c7; border-radius: 12px; padding: 24px; margin-top: 40px; }
+            .teaser-box h4 { color: #0284c7; font-size: 1.2rem; font-weight: 700; margin-bottom: 10px; }
+        </style>
+    </head>
+    <body>
+        
+        <header class="blog-navbar">
+            <div class="nav-container">
+                <div class="blog-logo">
+                    <a href="../index.html">Dong<span>.Blog</span></a>
+                </div>
+                <nav class="blog-nav-links">
+                    <a href="index.html">← Back to Blog</a>
+                </nav>
+            </div>
+        </header>
+
+        <main class="article-container">
+            <header class="article-header">
+                <span class="tag-arduino-iot">Arduino & IoT</span>
+                <span class="date-read">May 2026 • 8 min read</span>
+                <h1>Bits, Bytes, and Heartbeats: Hành Trình Lần Đầu Khám Phá Màn Hình LCD I2C Với Arduino</h1>
+                <p style="color: #6b7280; font-size: 1.1rem; max-width: 700px; margin: 0 auto; line-height: 1.6;">Khi những dòng dữ liệu khô khan trên Serial Monitor bước ra thế giới thực thông qua những điểm ảnh kỳ diệu. Câu chuyện về nhịp đập trái tim lỗi hẹn, đêm nghẹt thở cùng U23 Việt Nam và bài học kỹ thuật đáng giá về bài toán sụt áp phần cứng.</p>
+            </header>
+
+            <article class="article-content">
+                <p>Đối với những ai mới bước chân vào thế giới lập trình nhúng và vi điều khiển, khoảnh khắc nhìn thấy những dòng chữ đầu tiên hiện lên trên một màn hình vật lý luôn mang lại một cảm giác phấn khích khó tả. Không còn là những dòng chữ chạy dài vô tận trên màn hình máy tính thông qua Serial Monitor nữa, linh hồn của những dòng code lúc này đã thực sự "chạm" vào thế giới vật chất. Bài viết hôm nay là cuốn nhật ký ghi lại lần đầu tiên tôi bắt cặp thành công chiếc Arduino Uno với màn hình LCD 16x2 thông qua module giao tiếp I2C.</p>
+
+                <h2>1. Giải Mã Phần Cứng: Cứu Tinh Mang Tên Module I2C</h2>
+                <p>Thông thường, một màn hình LCD 16x2 tiêu chuẩn đòi hỏi tối thiểu từ 6 đến 12 dây kết nối trực tiếp vào các chân Digital của Arduino. Việc này không chỉ biến bo mạch của bạn thành một "tổ nhện" rối rắm mà còn ngốn sạch các chân IO cần thiết cho những cảm biến khác. </p>
+                <p>Để giải quyết bài toán này, tôi đã chọn giải pháp sử dụng **Màn hình LCD tích hợp sẵn Module chuyển đổi I2C**. Nhờ giao thức truyền dữ liệu nối tiếp này, số lượng dây kết nối từ màn hình về mạch Arduino được tinh giản một cách tối đa: <strong>Chỉ cần đúng 4 sợi dây</strong> để vận hành toàn bộ hệ thống hiển thị.</p>
+
+                <div class="media-block">
+                    <img src="/assets/blog-materials/lcd-applying/So_Do_Dau_Noi.webp" alt="Sơ đồ đấu nối Arduino với LCD I2C">
+                    <div class="media-caption">Sơ đồ đấu nối tối giản giữa Arduino và màn hình LCD thông qua module giao tiếp I2C, giảm thiểu số chân và độ phức tạp phần cứng.</div>
+                </div>
+
+                <h3>Yêu Cầu Thư Viện Phần Mềm</h3>
+                <p>Để điều khiển được module này, chúng ta cần nạp vào trình biên dịch Arduino IDE hai thư viện nền tảng:</p>
+                <ul>
+                    <li><code>Wire.h</code>: Thư viện tích hợp sẵn của Arduino hỗ trợ giao tiếp I2C.</li>
+                    <li><code>LiquidCrystal_I2C.h</code>: Thư viện bên thứ ba giúp tối ưu hóa các hàm xuất ký tự, quản lý con trỏ và bật tắt đèn nền (Backlight) cho LCD I2C.</li>
+                </ul>
+
+                <hr>
+
+                <h2>2. Chuyện Về Những Dòng Code Đầu Tiên</h2>
+
+                <h3>Kịch Bản 1: Trái Tim Nhấp Nháy Và Lời Hứa Dở Dang</h3>
+                <p>Khi đã làm chủ được các dòng lệnh cơ bản, việc đầu tiên tôi nghĩ đến là tự định nghĩa một ký tự đặc biệt (Custom Character) không có sẵn trong bảng mã ASCII mặc định của nhà sản xuất. Bằng thuật toán biểu diễn mảng nhị phân 8x8, tôi đã tạo ra hai trạng thái của một trái tim: Trái tim TO đầy đặn và Trái tim NHỎ co lại, rồi cho chúng lặp đi lặp lại để tạo hiệu ứng đập phập phồng.</p>
+                <p>Màn hình sáng lên dòng chữ <code>DONG ❤ HUYEN</code> với biểu tượng nhịp đập ở giữa. Tôi đã tỉ mẩn viết dòng code này với ý định gửi tặng một người và tạo một bất ngờ nho nhỏ... Nhưng cuộc sống đôi khi không diễn ra theo những kịch bản chúng ban vạch sẵn. Project hoàn thành trơn tru, nhưng cơ hội để gửi trao nó thì đã mãi mãi khép lại. 💔</p>
+
+                <div class="media-block">
+                    <video controls muted>
+                        <source src="/assets/blog-materials/lcd-applying/blinking-heart.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <div class="media-caption">Đoạn phim ghi lại khoảnh khắc màn hình LCD hiển thị biểu tượng nhịp đập trái tim thay đổi kích thước liên tục — Một kỷ niệm đáng trân trọng của một thời đã qua.</div>
+                </div>
+
+                <div class="media-block">
+                    <img src="/assets/blog-materials/lcd-applying/ILOVEU.webp" alt="Ảnh chụp màn hình LCD hiện DONG HUYEN">
+                    <div class="media-caption">Cận cảnh các điểm ảnh tĩnh kết xuất ký tự tự định nghĩa "DONG ❤ HUYEN" hiển thị rõ nét trên màn nền xanh.</div>
+                </div>
+
+                <h3>Kịch Bản 2: Đêm Đông Nghẹt Thở Cùng U23 Việt Nam</h3>
+                <p>Tạm gác lại những nỗi buồn cá nhân, vài tháng sau, tôi tìm thấy niềm cảm hứng mới từ một sự kiện thể thao chấn động. Đó là đêm ngày 16/01/2026, trận đấu nghẹt thở tại Vòng chung kết (VCK) U23 châu Á diễn ra tại Ả Rập Xê Út kết thúc vào lúc 22h30. Đội tuyển U23 Việt Nam đã xuất sắc đánh bại U23 UAE với tỷ số kịch tính 3-2 để chính thức giành tấm vé tiến thẳng vào vòng bán kết.</p>
+                <p>Trong niềm hân hoan tột độ của một cổ động viên, tôi lập tức lao vào bàn học, bật máy tính và gõ nhanh những dòng code để biến chiếc màn hình LCD nhỏ bé thành một tấm bảng điện tử ăn mừng chiến thắng vang dội với dòng chữ: <code>VIET NAM VO DICH</code>.</p>
+
+                <div class="media-block">
+                    <img src="/assets/blog-materials/lcd-applying/VIETNAMvodich.webp" alt="Màn hình LCD hiện VIET NAM VO DICH">
+                    <div class="media-caption">Dòng chữ tự hào được viết ngay trong đêm chiến thắng lịch sử của bóng đá nước nhà.</div>
+                </div>
+
+                <hr>
+
+                <h2>3. "Kiếp Nạn" Sụt Áp Và Bài Học Debug Phần Cứng Xương Máu</h2>
+                <p>Thế nhưng, một ý tưởng lóe lên: Nếu chỉ hiện chữ không thì chán quá, mình phải làm một hiệu ứng hoạt họa (Animation) cho hoành tráng! Tôi liền thiết kế thêm hai icon tự chế bằng mảng bit: Một hình cầu thủ đang tạo dáng sút và một quả bóng nhỏ, định bụng cho quả bóng chạy tịnh tiến từ chân cầu thủ bay sang góc phải màn hình.</p>
+                <p>Nhưng khi nạp code vào, một hiện tượng kỳ quái xảy ra: Hàng chữ phía trên vẫn hiển thị hoàn hảo, nhưng toàn bộ hàng dưới nơi có hình cầu thủ và quả bóng bỗng biến thành 3 vạch kẻ ngang vô nghĩa, nhấp nháy một cách hỗn loạn.</p>
+
+                <div class="media-block">
+                    <img src="/assets/blog-materials/lcd-applying/Loi-sut-bong.webp" alt="Lỗi hiển thị ký tự đặc biệt trên LCD">
+                    <div class="media-caption">Hiện tượng lỗi ký tự đặc biệt biến thành 3 vạch ngang do hệ thống bị sụt dòng điện.</div>
+                </div>
+
+                <p>Tôi lập tức lao vào kiểm tra logic code — Hoàn toàn sạch sẽ, không một lỗi cú pháp. Kiểm tra dây cắm trên breadboard — Tất cả đều chắc chắn. Sau một hồi suy ngẫm, tôi phát hiện ra nguyên nhân cốt lõi: <strong>Sự sụt áp nguồn cấp (Voltage Drop)</strong>.</p>
+                
+                <p class="highlight-quote">"Khi chạy các hiệu ứng chuyển động liên tục kết hợp với việc duy trì đèn nền (Backlight), dòng điện cấp từ cổng USB máy tính qua mạch Arduino Uno bị quá tải, không đủ cung cấp cho chip HD47780 trên LCD xử lý các bộ nhớ đệm tạo hình ký tự."</p>
+
+                <p>Để khắc phục triệt để lỗi này, tôi quyết định tách biệt nguồn nuôi cho hệ thống. Tôi đã "tậu" ngay 2 viên pin Li-ion loại 4.2V / 2000mAh mắc nối tiếp cùng với một bộ củ sạc chuyên dụng (bắt buộc phải là loại có mạch tự động ngắt khi đầy để đảm bảo an toàn cháy nổ) để cấp một nguồn năng lượng dồi dào, ổn định cho hệ thống.</p>
+
+                <div class="media-block">
+                    <img src="/assets/blog-materials/lcd-applying/sac-va-pin.webp" alt="Hệ pin nguồn Li-ion và dock sạc">
+                    <div class="media-caption">Giải pháp nâng cấp: Hệ thống nguồn độc lập sử dụng pin Li-ion chất lượng cao để chống sụt áp.</div>
+                </div>
+
+                <p>Và kết quả không nằm ngoài dự đoán! Khi dòng điện được cấp đầy đủ, con robot cầu thủ đã sút bóng một cách mượt mà, bóng bay vút qua màn hình và chuyển cảnh sang hình ảnh chiếc Cúp vô địch 🏆 cùng dòng chữ <code>CHAMPION</code> kiêu hãnh.</p>
+
+                <div class="media-block">
+                    <img src="/assets/blog-materials/lcd-applying/VIETNAM-complete.webp" alt="Đấu nối hoàn chỉnh nguồn pin với Arduino và LCD">
+                    <div class="media-caption">Hệ thống sau khi được độ lại nguồn pin cấp ngoài, vận hành cực kỳ ổn định và mạnh mẽ.</div>
+                </div>
+
+                <div class="media-block">
+                    <video controls>
+                        <source src="/assets/blog-materials/lcd-applying/VIETNAMVODICH.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <div class="media-caption">Thành quả ngọt ngào: Video ghi lại chuỗi chuyển cảnh animation 3 giai đoạn mượt mà (Ăn mừng -> Sút bóng -> Nâng cúp).</div>
+                </div>
+
+                <hr>
+
+                <h2>4. Chia Sẻ Mã Nguồn Dự Án</h2>
+                <p>Dưới đây là hai đoạn mã nguồn hoàn chỉnh tương ứng với hai kịch bản trên. Nhờ thư viện Prism, mã nguồn đã được tô màu cú pháp chuẩn chỉnh trực quan:</p>
+
+                <h3>Mã Dự Án 1: Hiển thị nhịp đập Trái Tim</h3>
+                <div class="code-block">
+                    <pre><code class="language-cpp">#include &lt;Wire.h&gt;
+#include &lt;LiquidCrystal_I2C.h&gt;
+
+// Khởi tạo màn hình LCD với địa chỉ I2C 0x27, kích thước 16x2
+LiquidCrystal_I2C lcd(0x27, 16, 2); 
+
+// Tự định nghĩa hình trái tim TO
+byte bigHeart[8] = {
+  0b00000,
+  0b01010,
+  0b11111,
+  0b11111,
+  0b11111,
+  0b01110,
+  0b00100,
+  0b00000
+};
+
+// Tự định nghĩa hình trái tim NHỎ
+byte smallHeart[8] = {
+  0b00000,
+  0b00000,
+  0b01010,
+  0b01110,
+  0b00100,
+  0b00000,
+  0b00000,
+  0b00000
+};
+
+void setup() {
+  lcd.init();
+  lcd.backlight();
+  lcd.clear();
+  
+  // Nạp icon trái tim vào bộ nhớ CGRAM của LCD
+  lcd.createChar(1, bigHeart);
+  lcd.createChar(2, smallHeart);
+  
+  // In phần chữ cố định ở hàng trên (hàng 0), căn giữa màn hình
+  lcd.setCursor(2, 0);
+  lcd.print("DONG");
+  lcd.setCursor(9, 0);
+  lcd.print("HUYEN");
+}
+
+void loop() {
+  // Hiện trái tim to ở vị trí cột 7, hàng 0
+  lcd.setCursor(6, 0);
+  lcd.print(" "); 
+  lcd.setCursor(7, 0);
+  lcd.write(1);
+  delay(500); // Đợi 0.5 giây
+  
+  // Đổi sang trái tim nhỏ tại cùng vị trí
+  lcd.setCursor(7, 0);
+  lcd.write(2);
+  delay(500); // Đợi 0.5 giây
+}</code></pre>
+                </div>
+
+                <h3>Mã Dự Án 2: Hoạt họa Cầu thủ sút bóng ăn mừng Champion</h3>
+                <div class="code-block">
+                    <pre><code class="language-cpp">#include &lt;Wire.h&gt;
+#include &lt;LiquidCrystal_I2C.h&gt;
+
+LiquidCrystal_I2C lcd(0x27, 16, 2); 
+
+// Icon Cầu thủ (Hình người)
+byte player[8] = {
+  0b00100, // Đầu
+  0b01110, // Thân / Tay
+  0b10101,
+  0b00100, // Bụng
+  0b01010, // Chân
+  0b10001,
+  0b00000,
+  0b00000
+};
+
+// Icon Quả bóng
+byte ball[8] = {
+  0b00000,
+  0b00100,
+  0b01110,
+  0b01110,
+  0b00100,
+  0b00000,
+  0b00000,
+  0b00000
+};
+
+// Icon Cái Cúp
+byte trophy[8] = {
+  0b11111,
+  0b10101,
+  0b11111,
+  0b01110,
+  0b00100,
+  0b00100,
+  0b01110,
+  0b11111
+};
+
+void setup() {
+  lcd.init();
+  lcd.backlight();
+  
+  // Nạp các icon vào bộ nhớ LCD
+  lcd.createChar(1, player);
+  lcd.createChar(2, ball);
+  lcd.createChar(3, trophy);
+}
+
+void loop() {
+  // ---- GIAI ĐOẠN 1: SÚT BÓNG ----
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("VIET NAM VO DICH"); // 15 ký tự vừa vặn hàng trên
+  
+  // Hiển thị cầu thủ đứng ở cột 1, hàng dưới (hàng 1)
+  lcd.setCursor(1, 1);
+  lcd.write(1);
+  
+  // Cho quả bóng chạy từ cột 2 đến cột 15 để tạo hiệu ứng sút bóng
+  for (int col = 2; col < 16; col++) {
+    lcd.setCursor(col, 1);
+    lcd.write(2);       // Vẽ quả bóng
+    delay(150);         // Tốc độ bóng bay (càng nhỏ bay càng nhanh)
+    
+    lcd.setCursor(col, 1);
+    lcd.print(" ");     // Xóa bóng ở vị trí cũ để tiến về phía trước
+  }
+  
+  delay(500); // Chờ một chút trước khi chuyển cảnh
+  
+  // ---- GIAI ĐOẠN 2: CHIẾN THẮNG ----
+  lcd.clear();
+  lcd.setCursor(4, 0); 
+  lcd.print("CHAMPION"); // Căn giữa chữ CHAMPION ở hàng trên
+  
+  lcd.setCursor(7, 1);
+  lcd.write(3);          // Hiển thị cái cúp ở giữa hàng dưới
+  
+  delay(4000); // Giữ màn hình CHAMPION trong 4 giây rồi lặp lại từ đầu
+}</code></pre>
+                </div>
+
+                <div class="teaser-box">
+                    <h4>Bật mí những dự án phần cứng tiếp theo... 🛠️</h4>
+                    <p>Việc làm chủ màn hình LCD 16x2 mới chỉ là bước đệm đầu tiên trong chuỗi kế hoạch dài hơi của tui. Hãy cùng đón chờ hai dự án cực khủng sắp được lên sóng:</p>
+                    <ul>
+                        <li><strong>Máy tính cầm tay thông minh (Handheld Calculator):</strong> Kết hợp LCD I2C và bàn phím Matrix Keypad 4x4 để tự chế một chiếc máy tính bỏ túi thực hiện các phép toán phức tạp.</li>
+                        <li><strong>Thiết bị thuyết trình tự động (Slide Presentation Tool):</strong> Biến hệ thống thành một công cụ chuyển đổi slide chuyên nghiệp, hiển thị tiến trình thuyết trình theo thời gian thực.</li>
+                    </ul>
+                </div>
+
+                <div class="share-container">
+                    <span class="share-text">Nếu bạn thấy bài viết này hữu ích, hãy chia sẻ nó nhé!</span>
+                    <button class="btn-copy-link" id="copyLinkBtn" onclick="copyArticleLink()">
+                        <span>🔗</span> <span id="btnText">Copy Article Link</span>
+                    </button>
+                </div>
+
+                <section class="comment-section">
+                    <h3>💬 Để lại bình luận hoặc cảm nhận</h3>
+                    <form id="commentForm" class="comment-form">
+                        <input type="hidden" id="web3FormsKey" value="50f899d1-4758-4deb-bb72-4de7e16ff1ff">
+                        <div class="form-row">
+                            <input type="text" id="commentName" placeholder="Tên của bạn (Bắt buộc) *" required>
+                            <input type="email" id="commentEmail" placeholder="Email của bạn">
+                        </div>
+                        <div class="form-row">
+                            <textarea id="commentContent" rows="4" placeholder="Chia sẻ cảm nghĩ của bạn tại đây... *" required></textarea>
+                        </div>
+                        <button type="submit" class="btn-submit-comment">🚀 Gửi cảm nhận</button>
+                        <div class="h-captcha" data-captcha="true"></div>
+                    </form>
+                    <div class="comments-container">
+                        <h4>Cộng đồng thảo luận (<span id="commentCount">0</span>)</h4>
+                        <div id="commentsList" class="comments-list"></div>
+                    </div>
+                </section>
+            </article>
+        </main>
+
+        <footer class="blog-footer">
+            <p>© 2026 DongDev Notes. Built with passion & electronics.</p>
+        </footer>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/normalize-whitespace/prism-normalize-whitespace.min.js"></script>        
+        <script>
+        // Cấu hình plugin normalize whitespace
+        Prism.plugins.NormalizeWhitespace.setDefaults({
+            'remove-trailing': true,
+            'remove-indent': true,
+            'left-trim': true,
+            'right-trim': true,
+        });
+        </script>
+        <script src="../script/blog.js"></script>
+        <script src="../script/index.js"></script>
+        <script src="https://web3forms.com/client/script.js" async defer></script>
+    </body>
+</html>

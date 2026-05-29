@@ -64,35 +64,42 @@ document.addEventListener("DOMContentLoaded", function () {
         const nameInput = document.getElementById("commentName");
         const emailInput = document.getElementById("commentEmail");
         const contentInput = document.getElementById("commentContent");
-        const apiKeyInput = document.getElementById("web3FormsKey"); // Lấy token ẩn
+        const apiKeyInput = document.getElementById("web3FormsKey");
 
         const name = nameInput.value.trim();
         const email = emailInput.value.trim();
         const content = contentInput.value.trim();
-        const blogId = window.location.pathname.split("/").pop() || "default-blog";
         const dateStr = new Date().toLocaleString("vi-VN", { hour: '2-digit', minute:'2-digit', day: '2-digit', month: '2-digit', year: 'numeric' });
 
-        // 1. VẪN LƯU VÀO LOCALSTORAGE ĐỂ HIỂN THỊ TRÊN WEB NHƯ CŨ
+        // === 1. LẤY VÀ KIỂM TRA TOKEN HCAPTCHA ===
+        const hCaptchaInput = commentForm.querySelector('[name="h-captcha-response"]');
+        const hCaptchaToken = hCaptchaInput ? hCaptchaInput.value : "";
+
+        if (!hCaptchaToken) {
+            alert("Vui lòng tích chọn ô xác thực 'Tôi không phải là robot' trước khi gửi!");
+            return; // Dừng lại không cho lưu hay gửi email nếu chưa giải captcha
+        }
+
+        // === 2. VẪN LƯU VÀO LOCALSTORAGE ĐỂ HIỂN THỊ TRÊN WEB ===
         const newComment = { name, email, content, date: dateStr };
         let comments = JSON.parse(localStorage.getItem(`comments_${blogId}`)) || [];
         comments.push(newComment);
         localStorage.setItem(`comments_${blogId}`, JSON.stringify(comments));
 
-        // 2. 🚀 BẮN EMAIL THẦN TỐC VỀ ĐIỆN THOẠI CỦA ÔNG VỚI FETCH API
-        // SỬA LẠI DÒNG NÀY: Chỉ cần check xem apiKeyInput có giá trị là gửi luôn
+        // === 3. 🚀 BẮN EMAIL VỀ WEB3FORMS KÈM TOKEN BẢO MẬT ===
         if (apiKeyInput && apiKeyInput.value.trim() !== "") {
-            // Tạo payload chuẩn cấu trúc của Web3Forms
-            // Thay thế đoạn formData cũ bằng đoạn này cho khỏi lỗi font email:
             const formData = new FormData();
             formData.append("access_key", apiKeyInput.value);
             formData.append("from_name", "Dong's Blog Notifier");
             formData.append("subject", `💬 Bình luận mới từ bài viết: ${blogId}`);
+            
+            // ĐƯA TOKEN HCAPTCHA VÀO ĐÂY ĐỂ ĐƯỢC WEB3FORMS CHẤP NHẬN
+            formData.append("h-captcha-response", hCaptchaToken);
 
-            // Sửa Key thành không dấu để Web3Forms render chuẩn format
             formData.append("Nguoi_Gui", `${name} (${email || 'Không để lại email'})`);
             formData.append("Noi_Dung_Cam_Nhan", content);
             formData.append("Thoi_Gian", dateStr);
-            // Gửi ngầm qua API
+
             fetch("https://api.web3forms.com/submit", {
                 method: "POST",
                 body: formData
@@ -108,8 +115,14 @@ document.addEventListener("DOMContentLoaded", function () {
             .catch(error => console.error("Lỗi kết nối mạng:", error));
         }
 
-        // Reset form và cập nhật lại giao diện hiển thị ngay tức thì
+        // === 4. RESET FORM & LÀM MỚI HCAPTCHA ===
         commentForm.reset();
+        
+        // Đoạn này ép ô hCaptcha quay về trạng thái trống để người sau comment không bị dùng lại token cũ
+        if (typeof hcaptcha !== 'undefined') {
+            hcaptcha.reset(); 
+        }
+
         loadComments();
     });
 
