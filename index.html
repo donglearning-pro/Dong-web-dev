@@ -3,8 +3,6 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Dong's Portfolio</title>
-        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="styles/styles.css">
     </head>
     <body>
@@ -28,12 +26,11 @@
         <main>
             <section id="home" class="Welcome">
                 <div class="welcome-content">
-                    <h1>Welcome to my world</h1>
-                    <p>Explore my creative space, technology projects, and academic journey</p>
-                    <a href="#projects" class="btn-primary">View Projects</a>
+                    <h1>Hi, I'm DongDev 👨‍💻</h1>
+                    <p>A passionate tech student exploring creative AI projects, IoT, and sharing my journey through writing.</p>
+                    <a href="#about" class="btn-primary">Learn More About Me</a>
                 </div>
             </section>
-
             <section id="about" class="About-me">
                 <div class="Describe-me">
                     <h2>Who is he?</h2>
@@ -93,7 +90,7 @@
                         <a href="projects/space.html" target="_blank">
                             <div class="project-overlay">
                                 <h3>Space Exploration</h3>
-                                <p>NASA API integration web app</p>
+                                <p>NASA inspiration web app</p>
                             </div>
                         </a>
                     </div>
@@ -101,10 +98,56 @@
                         <a href="projects/passenger-counter.html" target="_blank">
                             <div class="project-overlay">
                                 <h3>Passenger Counter</h3>
-                                <p>Automated passenger transit tracker</p>
+                                <p>Manual passenger transit tracker</p>
                             </div>
                         </a>
                     </div>
+                </div>
+            </section>
+
+            <section id="featured-blogs" class="blogs-section">
+                <h2>Featured Blogs</h2>
+                <div class="carousel-container">
+                    <button class="carousel-btn prev-btn" aria-label="Previous blog">‹</button>
+                    
+                    <div class="carousel-track-wrapper">
+                        <div class="carousel-track">
+                            
+                            <div class="blog-card">
+                                <div class="blog-card-content">
+                                    <span class="blog-tag tag-ai">AI & Tech</span>
+                                    <h3>Hành trình chinh phục Edge AI cho người mới bắt đầu</h3>
+                                    <p>Chia sẻ về những khó khăn, tài liệu nghiên cứu và cách mình tối ưu hóa mô hình AI nhận diện vật thể chạy trực tiếp trên laptop cá nhân.</p>
+                                    <a href="blog/edge-ai.html" target="_blank" class="read-more">Read Article →</a>
+                                </div>
+                            </div>
+
+                            <div class="blog-card">
+                                <div class="blog-card-content">
+                                    <span class="blog-tag tag-arduino">Arduino & IoT</span>
+                                    <h3>Xây dựng hệ thống Smart Home bằng Arduino từ số 0</h3>
+                                    <p>Từng bước thiết kế phần cứng, lập trình cảm biến để thiết bị tự động hoạt động trong nhà.</p>
+                                    <a href="blog/smart-home.html" target="_blank" class="read-more">Read Article →</a>
+                                </div>
+                            </div>
+
+                            <div class="blog-card">
+                                <div class="blog-card-content">
+                                    <span class="blog-tag tag-life">Learning & Lifestyle</span>
+                                    <h3>Từ cú sốc điểm số đến vị trí Thủ khoa kỳ thi thử</h3>
+                                    <p>Câu chuyện hậu trường về cách mình vượt qua áp lực tâm lý khủng khiếp và thiết lập lại phương pháp học tập để bứt phá ngoạn mục.</p>
+                                    <a href="blog/top-scorer.html" target="_blank" class="read-more">Read Article →</a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <button class="carousel-btn next-btn" aria-label="Next blog">›</button>
+                </div>
+    
+                <div class="view-all-container">
+                    <a href="blog/index.html" class="btn-secondary">Visit Full Blog Page →</a>
                 </div>
             </section>
 
@@ -172,7 +215,7 @@
                             <span class="icon">❤️</span>
                             <div class="achievement-info">
                                 <h4>Youth Union Leader</h4>
-                                <p>Led the branch in the "Xuân Gắn Kết - Tết Yêu Thương" Journey</p>
+                                <p>Led the class in the "Xuân Gắn Kết - Tết Yêu Thương" Journey</p>
                                 <span class="view-proof">View News / Activity →</span>
                             </div>
                         </div>
@@ -182,17 +225,86 @@
             </section>
         </main>
 
+        <section id="contact" class="contact-section">
+    <h2>Get In Touch</h2>
+    <p class="contact-subtitle">Bạn có ý tưởng hay, dự án thú vị hoặc chỉ muốn nói lời chào? Hãy nhắn cho mình nhé!</p>
+
+    <div class="contact-container">
+        <form action="https://api.web3forms.com/submit" method="POST" class="contact-form">
+            <input type="hidden" name="access_key" value="50f899d1-4758-4deb-bb72-4de7e16ff1ff">
+
+            <div class="form-group">
+                <input type="text" name="name" placeholder="Tên của bạn" required>
+            </div>
+            <div class="form-group">
+                <input type="email" name="email" placeholder="Email của bạn" required>
+            </div>
+            <div class="form-group">
+                <textarea name="message" rows="5" placeholder="Lời nhắn gửi tới DongDev..." required></textarea>
+            </div>
+            
+            <input type="hidden" name="from_name" value="DongDev Portfolio">
+            
+            <button type="submit" class="btn-submit">Gửi tin nhắn 🚀</button>
+
+            <div class="h-captcha" data-captcha="true"></div>
+        </form>
+
+        <div class="contact-info">
+            <h3>Thông tin liên hệ trực tiếp</h3>
+            <p>Nếu bạn muốn trao đổi qua email, hãy sử dụng địa chỉ bên dưới:</p>
+            <div class="email-box">
+                <span id="email-address">johnyduong.vn@gmail.com</span>
+                <button id="email-btn" class="btn-copy">Copy</button>
+            </div>
+            <p class="copy-status" id="copy-status"></p>
+        </div>
+    </div>
+</section>
+
         <footer class="link">
-            <h3>Let's Connect!</h3>
+            <h3>I'm on the Internet!</h3>
             <div class="social-grid">
                 <a href="https://www.facebook.com/JohnyDuong.vn/" target="_blank" class="social-item">Facebook</a>
                 <a href="https://youtube.com/@dongduong2811?si=77Dm0Ub-FxcCVlk1" target="_blank" class="social-item">Youtube</a>
-                <a href="#" id="email-btn" class="social-item">Email Me</a>                
                 <a href="https://github.com/donglearning-pro/Dong-web-dev" target="_blank" class="social-item">GitHub</a>
                 <a href="https://www.linkedin.com/in/%C4%91%C3%B4ng-d%C6%B0%C6%A1ng-236a42315/" target="_blank" class="social-item">LinkedIn</a>
             </div>
             <p class="copyright">© 2026 DongDev. All rights reserved.</p>
         </footer>
+
+        <div id="ai-chatbot-container">
+    <button id="chatbot-toggle-btn" aria-label="Chat với trợ lý DongDev">
+        <span class="chat-icon">💬</span>
+        <span class="chat-text">Hỏi về Đông?</span>
+    </button>
+
+    <div id="chatbot-window" class="hidden">
+        <div class="chatbot-header">
+            <div class="bot-info">
+                <img src="/assets/index-materials/ouroboros.webp" alt="Bot Logo" class="bot-avatar">
+                <div>
+                    <h4>DongDev Assistant</h4>
+                    <span class="status-online">Đang trực tuyến</span>
+                </div>
+            </div>
+            <button id="chatbot-close-btn">&times;</button>
+        </div>
+
+        <div id="chatbot-messages">
+            <div class="message bot-msg">
+                Xin chào! Mình là trợ lý ảo của DongDev. Bạn muốn tìm hiểu gì về kỹ năng, dự án hay thành tích của Đông nè? 😊
+            </div>
+        </div>
+
+        <div class="chatbot-input-area">
+            <input type="text" id="chatbot-input" placeholder="Nhập tin nhắn..." autocomplete="off">
+            <button id="chatbot-send-btn">Gửi</button>
+        </div>
+    </div>
+</div>
+
         <script src="/script/index.js"></script>
+        <script src="https://web3forms.com/client/script.js" async defer></script>
     </body>
 </html>

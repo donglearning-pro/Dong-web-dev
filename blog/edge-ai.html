@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Edge AI & ML: Fraud Hunters and Gesture Masters — Dong's Blog</title>
+        <title>Edge AI & Computer Vision: Exam Proctoring and Gesture Masters — Dong's Blog</title>
         <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="../styles/blogstyles.css">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" rel="stylesheet" />
@@ -41,37 +41,36 @@
 
         <main class="article-container">
             <header class="article-header">
-                <span class="tag tag-ai">Edge AI & ML</span>
+                <span class="tag tag-ai">Edge AI & Computer Vision</span>
                 <span class="read-time">May 2026 • 8 min read</span>
-                <h1>Edge AI & ML: Kẻ Săn Gian Lận và Bậc Thầy Điều Khiển Bằng Cử Chỉ</h1>
-                <p style="color: var(--text-muted); font-size: 1.1rem;">Hành trình đi qua hai thế giới: Từ việc nhào nặn hàng triệu dòng dữ liệu tài chính đến việc biến camera laptop thành đôi mắt thần kỳ nhận diện cử chỉ tay thời gian thực.</p>
+                <h1>Edge AI & Computer Vision: Giám Thị Số và Bậc Thầy Điều Khiển Bằng Cử Chỉ</h1>
+                <p style="color: var(--text-muted); font-size: 1.1rem;">Hành trình tối ưu hóa thị giác máy tính: Từ việc ứng dụng mô hình YOLO11 phát hiện gian lận phòng thi đến việc biến camera thành thanh điều hướng âm lượng hệ thống thời gian thực.</p>
             </header>
 
             <article class="article-content">
-                <p>Trong thế giới Trí tuệ nhân tạo, chúng ta thường nghe về những cụm server khổng lồ chạy mô hình ngôn ngữ lớn. Nhưng "vẻ đẹp" thực sự đối với một maker lại là <strong>Edge AI</strong> — đưa trí tuệ thông minh xuống chạy cục bộ, trực tiếp trên máy tính cá nhân của mình. Trong bài viết này, tôi sẽ tổng kết lại hai dự án mang hai sắc thái hoàn toàn khác biệt mà tôi vừa chinh phục.</p>
+                <p>Trong thế giới Trí tuệ nhân tạo, chúng ta thường nghe về những cụm server khổng lồ chạy mô hình ngôn ngữ lớn phức tạp. Nhưng "vẻ đẹp" thực sự đối với một maker lại là <strong>Edge AI (AI tại biên)</strong> — đưa trí tuệ thông minh xuống chạy cục bộ (local) trực tiếp trên phần cứng máy tính cá nhân mà không cần phụ thuộc vào internet hay điện toán đám mây. Cách tiếp cận này giúp giảm thiểu độ trễ xử lý (low latency) và bảo mật dữ liệu tối đa. Trong bài viết này, tôi sẽ tổng kết lại hai dự án ứng dụng Thị giác máy tính (Computer Vision) mang hai sắc thái hoàn toàn khác biệt mà tôi vừa chinh phục.</p>
 
-                <h2>1. Kẻ Săn Dữ Liệu: Dự án Phát Hiện Gian Lận (Fraud Detection)</h2>
-                <p>Dự án này thiên về Phân tích Dữ liệu và Bảo mật. Nó tập trung vào việc xử lý dữ liệu lớn, xây dựng mô hình Học máy (Machine Learning) để "ngửi" thấy mùi gian lận từ các tập dữ liệu thô và phân loại các giao dịch hoặc hành vi bất thường.</p>
+                <h2>1. Giám Thị Số: Dự án Phát Hiện Thí Sinh Sử Dụng Điện Thoại</h2>
+                <p>Dự án này tập trung vào bài toán <strong>Object Detection (Phát hiện vật thể)</strong> thời gian thực. Thay vì phải tốn hàng tuần liền để thu thập hàng ngàn bức ảnh và huấn luyện (train) lại một mô hình từ con số 0, tôi đã tận dụng sức mạnh của <strong>Pre-trained Model (Mô hình huấn luyện sẵn)</strong> YOLO11. Đây là mô hình đã được các chuyên gia tối ưu trên tập dữ liệu COCO khổng lồ, có khả năng nhận diện ngay lập tức lớp đối tượng "cell phone" (điện thoại di động) với độ chính xác cao ngay khi khởi chạy.</p>
 
-                <h3>Quá trình rèn luyện mô hình</h3>
+                <h3>Khó khăn & Đánh đổi trong quá trình Suy Luận (Inference)</h3>
+                <p>Vì không tham gia vào quá trình huấn luyện dữ liệu, thử thách lớn nhất của dự án chuyển dịch sang việc tinh chỉnh logic chạy mô hình trực tiếp và xử lý luồng video qua thư viện <strong>OpenCV</strong>. Bài toán đau đầu ở đây là tìm ra điểm cân bằng cho tham số <code>conf</code> (Confidence Threshold - Ngưỡng tin cậy):</p>
                 <ul>
-                    <li><strong>Làm sạch dữ liệu:</strong> Thu thập, xử lý các giá trị thiếu (missing values) và chuẩn hóa dữ liệu số để đưa về cùng một quy chuẩn.</li>
-                    <li><strong>Trị bệnh "Thiên vị":</strong> Giải quyết bài toán mất cân bằng dữ liệu (Imbalanced Data) — một thực tế đau đầu khi số ca gian lận luôn ít hơn hàng ngàn lần so với giao dịch hợp pháp.</li>
-                    <li><strong>Huấn luyện & Đánh giá:</strong> Thử nghiệm các mô hình phân loại hạng nặng như <em>Logistic Regression, Random Forest, XGBoost</em>. Không dùng Accuracy thông thường, tôi phải đánh giá bằng các chỉ số chuyên dụng và khắt khe hơn: Precision, Recall và F1-Score.</li>
+                    <li>Nếu đặt ngưỡng tin cậy quá thấp, hệ thống sẽ dính lỗi <strong>False Positive (Dương tính giả - Báo động nhầm)</strong>: AI sẽ nhận nhầm các vật thể như hộp bút, lòng bàn tay hoặc máy tính cầm tay thành chiếc điện thoại.</li>
+                    <li>Nếu đặt ngưỡng quá cao, hệ thống sẽ mắc lỗi <strong>False Negative (Âm tính giả - Bỏ sót gian lận)</strong>: Thí sinh lén lút sử dụng điện thoại nhưng lọt lưới camera vì mô hình không đủ độ chắc chắn để đưa ra cảnh báo.</li>
                 </ul>
-
-                <h3>Khó khăn & Đánh đổi</h3>
-                <p>Thử thách lớn nhất là nếu không xử lý kỹ dữ liệu nhiễu và cực kỳ lệch, mô hình sẽ bị <strong>"học vẹt" (Overfitting)</strong> và khôn lỏi chọn cách luôn đoán là "không gian lận" để đạt tỷ lệ đúng 99%. Bài toán đau đầu của người làm bảo mật là việc tinh chỉnh (tối ưu hóa) sao cho giảm tối đa tỷ lệ "bỏ sót gian lận" (False Negative) mà không làm khách hàng khó chịu vì bị "báo động nhầm" (False Positive).</p>
 
                 <div class="media-block">
                     <video controls muted loop autoplay>
                         <source src="../assets/blog-materials/edge-ai/ai_alarm.mp4" type="video/mp4">
                         Trình duyệt của bạn không hỗ trợ thẻ video.
                     </video>
-                    <div class="media-caption">Mở rộng bài toán cảnh báo: Thay vì dữ liệu số, tôi thử nghiệm AI phát hiện hành vi vật lý. Hệ thống nhận diện hành vi cầm điện thoại lên, ngay lập tức bật cảnh báo và chụp ảnh làm bằng chứng!</div>
+                    <div class="media-caption">Hệ thống Edge AI giám sát thời gian thực: Khi phát hiện hành vi vi phạm (sử dụng điện thoại), mô hình lập tức kích hoạt chuông báo động và tự động chụp ảnh màn hình lưu trữ bằng chứng vi phạm.</div>
                 </div>
+
                 <h3>Source Code: AI Evidence Collector</h3>
-                <p>Đoạn code dưới đây sử dụng mô hình <strong>YOLO11</strong> để phát hiện vật thể và <strong>OpenCV</strong> để ghi hình. Tôi đã thêm thuật toán so sánh thời gian (logic cooldown 2 giây) để tránh việc camera chụp liên tục hàng trăm tấm ảnh gây đầy bộ nhớ.</p>
+                <p>Đoạn code dưới đây tích hợp mô hình <strong>YOLO11</strong> để liên tục quét từng khung hình (frame-by-frame) từ webcam qua OpenCV. Tôi đã thiết kế thêm một thuật toán kiểm soát thời gian (cooldown logic 2 giây) để ngăn camera chụp ảnh liên tục hàng trăm tấm trong một khoảnh khắc, giúp tiết kiệm bộ nhớ máy tính.</p>
+                
                 <div class="code-block">
                     <pre><code class="language-python">
 import cv2
@@ -93,6 +92,7 @@ while cap.isOpened():
     success, frame = cap.read()
     if not success: break
 
+    # Chạy suy luận (Inference) với mức threshold tối ưu 0.25
     results = model(frame, conf=0.25, verbose=False) 
     found_phone = False
 
@@ -113,10 +113,10 @@ while cap.isOpened():
 
         # 2. KIỂM TRA: Nếu cách lần chụp trước hơn 2 giây thì mới chụp tiếp
         if current_time - last_saved_time > 2:
-            # Tạo tên file theo ngày giờ: ví dụ phone_17123456.jpg
+            # Tạo tên file theo mốc thời gian thực tế
             file_name = f"canh_bao/phone_{int(current_time)}.jpg"
             
-            # Lệnh chụp và lưu ảnh
+            # Lệnh chụp và lưu ảnh qua OpenCV
             cv2.imwrite(file_name, frame)
             
             print(f"--- Đã lưu bằng chứng: {file_name} ---")
@@ -131,8 +131,9 @@ cap.release()
 cv2.destroyAllWindows()
                     </code></pre>
                 </div>
+
                 <h2>2. Tương Tác Giác Quan: Điều Khiển Âm Lượng Bằng Cử Chỉ Tay</h2>
-                <p>Khác với sự tĩnh lặng của dữ liệu tài chính, dự án này ngập tràn tính tương tác. Tôi đã ứng dụng Trí tuệ nhân tạo thời gian thực (Real-time AI) để biến camera laptop thành một cảm biến, trực tiếp can thiệp vào phần cứng máy tính.</p>
+                <p>Nếu dự án đầu tiên đóng vai trò như một "lớp bảo mật" quan sát, thì dự án này lại mang tính tương tác vật lý cực kỳ cao. Tôi ứng dụng giải pháp AI biên để biến camera laptop thành một thiết bị cảm biến không tiếp xúc, trực tiếp can thiệp và điều chỉnh thông số âm thanh của phần cứng máy tính thông qua cử chỉ ngón tay.</p>
 
                 <div class="media-block">
                     <video controls muted loop autoplay>
@@ -144,14 +145,15 @@ cv2.destroyAllWindows()
 
                 <h3>Cách hệ thống vận hành</h3>
                 <ul>
-                    <li>Sử dụng thư viện <strong>OpenCV</strong> để bắt trọn từng khung hình từ Webcam liên tục.</li>
-                    <li>Nhúng mô hình <strong>MediaPipe</strong> của Google để dò tìm 21 điểm mốc (landmarks) trên bàn tay.</li>
-                    <li>Dùng hàm <code>math.hypot</code> để tính khoảng cách hình học giữa đỉnh ngón cái và ngón trỏ.</li>
-                    <li>Ánh xạ toán học <code>np.interp</code> để quy đổi khoảng cách pixel đó sang mức âm lượng và chiều cao của thanh giao diện.</li>
-                    <li>Dùng thư viện <strong>pycaw</strong> (Python Audio Control Wrapper) để móc nối vào hệ thống Windows và chỉnh âm.</li>
+                    <li><strong>Bắt luồng hình ảnh:</strong> Dùng <strong>OpenCV</strong> để thu thập hình ảnh từ webcam một cách liên tục.</li>
+                    <li><strong>Nhận diện khung xương tay (Hand Landmark Tracking):</strong> Nhúng mô hình có sẵn của thư viện <strong>MediaPipe</strong> (Google) để xác định chính xác vị trí của 21 điểm mốc tọa độ trên bàn tay dưới dạng không gian hình học.</li>
+                    <li><strong>Xử lý tọa độ (Coordinate Manipulation):</strong> Trích xuất tọa độ của đầu ngón tay cái (điểm số 4) và đầu ngón tay trỏ (điểm số 8), sau đó dùng hàm số học <code>math.hypot</code> để tính khoảng cách đường thẳng giữa hai điểm này trên màn hình.</li>
+                    <li><strong>Ánh xạ toán học (Data Mapping):</strong> Sử dụng hàm nội suy tuyến tính <code>np.interp</code> để quy đổi khoảng cách điểm ảnh (pixel) thay đổi liên tục đó sang dải âm lượng thực tế của hệ điều hành.</li>
+                    <li><strong>Điều khiển cấp hệ thống (System-level Control):</strong> Thay vì gọi các Web API qua mạng internet, dự án sử dụng thư viện <strong>pycaw</strong> kết nối thẳng vào phần lõi âm thanh hệ thống (Windows Core Audio API) để lập tức thay đổi thanh gạt âm lượng tổng của thiết bị.</li>
                 </ul>
+
                 <h3>Source Code: Gesture Volume Control</h3>
-                <p>Mấu chốt của đoạn script này là sử dụng <code>np.interp</code> để nội suy khoảng cách giữa ngón cái và ngón trỏ (với giới hạn từ 50px đến 200px) sang dải âm lượng thực tế của hệ thống.</p>
+                <p>Mấu chốt của đoạn script này là sử dụng <code>np.interp</code> để ánh xạ dải pixel (ví dụ từ 50px khi chụm tay đến 200px khi duỗi tay) sang dải Decibel tương ứng của card âm thanh máy tính.</p>
                 <div class="code-block">
                     <pre><code class="language-python">
 import cv2
@@ -163,33 +165,30 @@ from comtypes import CLSCTX_ALL
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 
 # --- 1. SETUP CAMERA & MEDIAPIPE ---
-# Dùng cách import chuẩn
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands(max_num_hands=1, min_detection_confidence=0.7)
 mp_draw = mp.solutions.drawing_utils
 cap = cv2.VideoCapture(0)
 
-# --- 2. SETUP ÂM THANH (Bản chuẩn) ---
+# --- 2. INTEGRATE NATIVE AUDIO OS VIA PYCAW ---
 try:
     devices = AudioUtilities.GetSpeakers()
     interface = devices.Activate(
         IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
     volume = cast(interface, POINTER(IAudioEndpointVolume))
     
-    # Lấy dải âm lượng
+    # Lấy dải âm lượng hệ thống (thường tính bằng đơn vị Decibel âm)
     vol_range = volume.GetVolumeRange()
     min_vol = vol_range[0]
     max_vol = vol_range[1]
 except Exception as e:
     print("Lỗi khởi tạo âm thanh:", e)
-    print("Hãy chắc chắn bạn đã chạy lệnh pip install comtypes==1.1.14 pycaw==20181226")
     exit()
 
 # --- 3. VÒNG LẶP CHÍNH ---
 while True:
     success, img = cap.read()
-    if not success:
-        break
+    if not success: break
         
     img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     results = hands.process(img_rgb)
@@ -204,22 +203,21 @@ while True:
                 lm_list.append([id, cx, cy])
 
     if len(lm_list) != 0:
-        # Lấy tọa độ ngón cái (4) và ngón trỏ (8)
+        # Lấy tọa độ ngón cái (id=4) và ngón trỏ (id=8)
         x1, y1 = lm_list[4][1], lm_list[4][2]
         x2, y2 = lm_list[8][1], lm_list[8][2]
         cx, cy = (x1 + x2) // 2, (y1 + y2) // 2
 
-        # Vẽ hình
+        # Vẽ các điểm mốc đồ họa lên màn hình qua OpenCV
         cv2.circle(img, (x1, y1), 15, (255, 0, 255), cv2.FILLED)
         cv2.circle(img, (x2, y2), 15, (255, 0, 255), cv2.FILLED)
         cv2.line(img, (x1, y1), (x2, y2), (255, 0, 255), 3)
         cv2.circle(img, (cx, cy), 15, (255, 0, 255), cv2.FILLED)
 
-        # Tính toán độ dài
+        # Tính toán độ dài khoảng cách hình học
         length = math.hypot(x2 - x1, y2 - y1)
 
-        # Chuyển đổi độ dài tay sang âm lượng
-        # 50 là chụm tay, 200 là duỗi tay (tùy chỉnh theo khoảng cách cam)
+        # Ánh xạ khoảng cách ngón tay sang giá trị âm lượng hệ thống
         vol = np.interp(length, [50, 200], [min_vol, max_vol])
         volume.SetMasterVolumeLevel(vol, None)
 
@@ -228,7 +226,6 @@ while True:
 
     cv2.imshow("Volume Control", img)
     
-    # Nhấn 'q' để thoát
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
@@ -236,41 +233,42 @@ cap.release()
 cv2.destroyAllWindows()
                     </code></pre>
                 </div>
+
                 <h3>Những cú "vấp ngã" của dân Dev</h3>
-                <p>Làm việc với hệ thống chưa bao giờ là dễ dàng. Đầu tiên là <strong>xung đột thư viện</strong> kinh điển giữa `pycaw` và `comtypes` tạo ra các lỗi (NameError, Activate) đỏ lừ terminal. Sau đó là các <strong>lỗi thụt lề (IndentationError)</strong> đặc trưng của Python khi tôi cố gắng lồng ghép thêm thuật toán tính FPS.</p>
-                <p>Trải nghiệm người dùng (UX) cũng là một thử thách. Ở bản nháp đầu tiên, âm lượng tăng quá gắt! Tôi nhận ra sự khác biệt giữa thang đo Decibel của Windows (tăng theo hàm Logarit) và cảm nhận âm thanh của tai người (Tuyến tính). Phải điều chỉnh lại thuật toán ánh xạ thì mọi thứ mới "mượt mà" như video trên.</p>
+                <p>Làm việc trực tiếp với phần cứng máy tính thông qua mã nguồn chưa bao giờ là dễ dàng. Thử thách đầu tiên đến từ <strong>xung đột thư viện</strong> cục bộ giữa <code>pycaw</code> và <code>comtypes</code> trên môi trường Windows, tạo ra loạt mã lỗi hệ thống khó chịu khi cố gắng truy cập trực tiếp vào Mixer điều khiển âm thanh thiết bị.</p>
+                <p>Khó khăn tiếp theo nằm ở trải nghiệm người dùng (UX). Trong bản chạy thử đầu tiên, tốc độ tăng giảm âm thanh diễn ra cực kỳ gắt và không đều. Lý do là vì card âm thanh máy tính tiếp nhận tín hiệu theo thang đo âm lượng Decibel (Logarit), trong khi tai người lại cảm nhận âm thanh theo hướng tuyến tính. Việc giải quyết mâu thuẫn này đòi hỏi tôi phải cấu hình lại các điểm mốc giới hạn trong hàm nội suy toán học để tạo ra trải nghiệm điều khiển tự nhiên nhất.</p>
 
                 <h2>Tổng Kết Hành Trình</h2>
-                <p>Từ một người hoang mang trước những dòng thông báo lỗi đỏ rực, tôi đã kiên trì đi qua từng bước, hiểu rõ bản chất của hệ tọa độ ảnh, các thang đo âm thanh, cho đến cách làm chủ các khối lệnh Python và dữ liệu lớn.</p>
+                <p>Bằng việc ứng dụng khéo léo các công cụ mã nguồn mở và mô hình AI huấn luyện sẵn, tôi nhận ra việc triển khai giải pháp thông minh không nhất thiết luôn phải bắt đầu bằng việc train model đắt đỏ, mà nằm ở tư duy tích hợp công nghệ và làm chủ luồng xử lý dữ liệu.</p>
 
                 <table class="compare-table">
                     <thead>
                         <tr>
                             <th>Đặc điểm</th>
-                            <th>Fraud Detection (Phát Hiện Gian Lận)</th>
-                            <th>Hand Gesture Control (Cử Chỉ Tay)</th>
+                            <th>Exam Proctoring AI (Giám Thị Số)</th>
+                            <th>Hand Gesture Control (Điều Khiển Cử Chỉ)</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td><strong>Lĩnh vực</strong></td>
-                            <td>Data Science & Machine Learning</td>
-                            <td>Computer Vision & Real-time AI</td>
+                            <td><strong>Lĩnh vực ứng dụng</strong></td>
+                            <td>Computer Vision & Object Detection (Thị giác máy tính)</td>
+                            <td>Human-Computer Interaction (Tương tác Người - Máy)</td>
                         </tr>
                         <tr>
-                            <td><strong>Công nghệ cốt lõi</strong></td>
-                            <td>Pandas, Numpy, Scikit-learn, XGBoost</td>
-                            <td>OpenCV, MediaPipe, Pycaw</td>
+                            <td><strong>Mô hình & Thư viện dùng lại</strong></td>
+                            <td>YOLO11 Model (Pre-trained), OpenCV</td>
+                            <td>MediaPipe Hand Tracking Framework, OpenCV, Pycaw</td>
                         </tr>
                         <tr>
-                            <td><strong>Giá trị đúc kết</strong></td>
-                            <td>Nâng cao tư duy phân tích, xử lý dữ liệu nhiễu/lệch. Hiểu cách hệ thống ngân hàng bảo vệ dòng tiền.</td>
-                            <td>Nắm vững hệ tọa độ ảnh (trục Y lật ngược), giao tiếp API Windows (COM) và kỹ năng Debug phần cứng.</td>
+                            <td><strong>Giá trị đúc kết kỹ thuật</strong></td>
+                            <td>Làm chủ kỹ thuật suy luận (Inference), tối ưu tốc độ xử lý luồng ảnh webcam, cân bằng chỉ số lỗi False Positive/Negative.</td>
+                            <td>Thành thạo xử lý hệ tọa độ hình ảnh, thao tác xử lý hình học không gian trực quan và can thiệp điều khiển âm thanh hệ thống cục bộ.</td>
                         </tr>
                     </tbody>
                 </table>
 
-                <p>Hai dự án này là những viên gạch nền tảng cực kỳ vững chắc: một bên rèn luyện cho tôi sự điềm tĩnh và tư duy logic của một <strong>Nhà Khoa học Dữ liệu</strong>, một bên cung cấp kỹ năng "thực chiến" và độ nhạy bén của một <strong>Kỹ sư AI/Computer Vision</strong>.</p>
+                <p>Hai dự án này là những viên gạch nền tảng cực kỳ vững chắc, cung cấp cho tôi kỹ năng thực chiến sắc bén, độ nhạy khi debug phần cứng và tư duy xử lý vấn đề của một <strong>Kỹ sư AI ứng dụng / Computer Vision Engineer</strong> thực thụ.</p>
             
                 <div class="share-container">
                     <span class="share-text">Nếu bạn thấy bài viết này hữu ích, hãy chia sẻ nó nhé!</span>
@@ -302,7 +300,7 @@ cv2.destroyAllWindows()
                     <div class="comments-container">
                         <h4>Cộng đồng thảo luận (<span id="commentCount">0</span>)</h4>
                         <div id="commentsList" class="comments-list">
-                            </div>
+                        </div>
                     </div>
                 </section>
             </article>

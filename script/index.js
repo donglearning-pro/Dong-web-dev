@@ -1,28 +1,247 @@
-    document.getElementById('email-btn').addEventListener('click', function(e) {
-        e.preventDefault(); // Ngăn trang web cuộn lên đầu khi bấm thẻ #
+// Hàm hỗ trợ kiểm tra độ dài dữ liệu (Đặt bên ngoài)
+function validateInputLength(str, min, max) {
+    return str.length >= min && str.length <= max;
+}
+
+// Xử lý sự kiện click sao chép Email
+document.getElementById('email-btn').addEventListener('click', function(e) {
+    e.preventDefault(); 
+    const emailAddress = 'johnyduong.vn@gmail.com';
+    
+    navigator.clipboard.writeText(emailAddress).then(() => {
+        const originalText = this.innerText;
+        this.innerText = 'Copied! ✓';
+        this.style.backgroundColor = '#10b981'; 
+        this.style.borderColor = '#10b981';
+        this.style.color = '#ffffff';
         
-        const emailAddress = 'johnyduong.vn@gmail.com';
+        setTimeout(() => {
+            this.innerText = originalText;
+            this.style.backgroundColor = ''; 
+            this.style.borderColor = '';
+            this.style.color = '';
+        }, 2000);
+    }).catch(err => {
+        alert('My email: ' + emailAddress);
+    });
+});
+
+// Xử lý sự kiện Slider di chuyển bài viết Blog
+document.addEventListener('DOMContentLoaded', () => {
+    const track = document.querySelector('.carousel-track');
+    if (!track) return;
+    
+    const slides = Array.from(track.children);
+    const nextButton = document.querySelector('.next-btn');
+    const prevButton = document.querySelector('.prev-btn');
+    const container = document.querySelector('.carousel-container');
+    
+    let currentIndex = 0;
+    let autoPlayTimer;
+
+    function updateSlidePosition() {
+        track.style.transform = `translateX(-${currentIndex * 100}%)`;
+    }
+
+    function moveToNextSlide() {
+        currentIndex = (currentIndex === slides.length - 1) ? 0 : currentIndex + 1;
+        updateSlidePosition();
+    }
+
+    function moveToPrevSlide() {
+        currentIndex = (currentIndex === 0) ? slides.length - 1 : currentIndex - 1;
+        updateSlidePosition();
+    }
+
+    function startAutoPlay() {
+        autoPlayTimer = setInterval(moveToNextSlide, 8000);
+    }
+
+    function stopAutoPlay() {
+        clearInterval(autoPlayTimer);
+    }
+
+    if(nextButton) nextButton.addEventListener('click', () => { stopAutoPlay(); moveToNextSlide(); startAutoPlay(); });
+    if(prevButton) prevButton.addEventListener('click', () => { stopAutoPlay(); moveToPrevSlide(); startAutoPlay(); });
+    if(container) {
+        container.addEventListener('mouseenter', stopAutoPlay);
+        container.addEventListener('mouseleave', startAutoPlay);
+    }
+
+    startAutoPlay();
+});
+
+// Xử lý sự kiện gửi Form liên hệ (Contact Form)
+const contactForm = document.querySelector(".contact-form");
+
+if (contactForm) {
+    contactForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        // Lấy các ô nhập liệu
+        const nameInput = contactForm.querySelector('[name="name"]');
+        const emailInput = contactForm.querySelector('[name="email"]');
+        const messageInput = contactForm.querySelector('[name="message"]');
+        const apiKeyInput = contactForm.querySelector('[name="access_key"]');
+        const submitBtn = contactForm.querySelector('.btn-submit');
+
+        const name = nameInput.value.trim();
+        const email = emailInput.value.trim();
+        const message = messageInput.value.trim();
+        const dateStr = new Date().toLocaleString("vi-VN", { hour: '2-digit', minute:'2-digit', day: '2-digit', month: '2-digit', year: 'numeric' });
+
+        // === 1. KIỂM TRA ĐỘ DÀI DỮ LIỆU TRƯỚC TIÊN ===
+        if (!validateInputLength(message, 10, 5000)) {
+            alert("Lời nhắn quá ngắn (dưới 10 ký tự) hoặc quá dài (trên 5000 ký tự)! Vui lòng bổ sung thêm thông tin.");
+            return; // Dừng lại tại đây khi nút gửi CHƯA bị khóa
+        }
+
+        // === 2. KIỂM TRA TOKEN HCAPTCHA ===
+        const hCaptchaInput = contactForm.querySelector('[name="h-captcha-response"]');
+        const hCaptchaToken = hCaptchaInput ? hCaptchaInput.value : "";
+
+        if (hCaptchaInput && !hCaptchaToken) {
+            alert("Vui lòng tích chọn ô xác thực 'Tôi không phải là robot' trước khi gửi tin nhắn!");
+            return; 
+        }
+
+        // === 3. KIỂM TRA ACCESS KEY ===
+        if (!apiKeyInput || apiKeyInput.value.trim() === "") {
+            alert("Lỗi hệ thống: Vui lòng cấu hình Access Key Web3Forms chính xác!");
+            return;
+        }
+
+        // === 4. KHÓA NÚT BẤM VÀ ĐỔI TRẠNG THÁI ===
+        const originalBtnText = submitBtn.innerText;
+        submitBtn.innerText = "Đang gửi đi... ⏳";
+        submitBtn.disabled = true;
+
+        // === 5. ĐÓNG GÓI VÀ BẮN EMAIL ===
+        const formData = new FormData();
+        formData.append("access_key", apiKeyInput.value);
+        formData.append("from_name", "DongDev Portfolio");
+        formData.append("subject", `📩 Tin nhắn mới từ khách xem Web: ${name}`);
         
-        // Sử dụng Clipboard API để copy email
-        navigator.clipboard.writeText(emailAddress).then(() => {
-            // Lưu lại chữ gốc (Email Me)
-            const originalText = this.innerText;
-            
-            // Đổi hiệu ứng nút khi đã copy thành công
-            this.innerText = 'Copied to Clipboard! ✓';
-            this.style.backgroundColor = '#10b981'; // Đổi sang màu xanh lá thân thiện
-            this.style.borderColor = '#10b981';
-            this.style.color = '#ffffff';
-            
-            // Sau 2 giây, trả nút về trạng thái ban đầu
-            setTimeout(() => {
-                this.innerText = originalText;
-                this.style.backgroundColor = ''; 
-                this.style.borderColor = '';
-                this.style.color = '';
-            }, 2000);
-        }).catch(err => {
-            // Phương án dự phòng nếu trình duyệt cũ không hỗ trợ tự động copy
-            alert('My email: ' + emailAddress);
+        if (hCaptchaToken) {
+            formData.append("h-captcha-response", hCaptchaToken);
+        }
+
+        formData.append("Ten nguoi gui", name);
+        formData.append("Email lien he", email || 'Không để lại email');
+        formData.append("Loi nhan", message);
+        formData.append("Thoi gian gui", dateStr);
+
+        fetch("https://api.web3forms.com/submit", {
+            method: "POST",
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert("Cảm ơn bạn! Tin nhắn đã được gửi thành công đến DongDev. 🚀");
+                contactForm.reset();
+                if (typeof hcaptcha !== 'undefined') {
+                    hcaptcha.reset(); 
+                }
+            } else {
+                alert("Gửi tin nhắn thất bại: " + data.message);
+            }
+        })
+        .catch(error => {
+            alert("Không thể kết nối internet. Vui lòng kiểm tra lại mạng!");
+        })
+        .finally(() => {
+            // Luôn mở khóa nút bấm khi có kết quả trả về từ server
+            submitBtn.innerText = originalBtnText;
+            submitBtn.disabled = false;
         });
     });
+}
+
+// Chống Clickjacking
+if (window.self !== window.top) {
+    window.top.location = window.self.location;
+}
+
+// ==========================================
+// 🤖 CẤU HÌNH MINI AI CHATBOT (GEMINI API)
+// ==========================================
+
+const chatbotToggleBtn = document.getElementById('chatbot-toggle-btn');
+const chatbotWindow = document.getElementById('chatbot-window');
+const chatbotCloseBtn = document.getElementById('chatbot-close-btn');
+const chatbotMessages = document.getElementById('chatbot-messages');
+const chatbotInput = document.getElementById('chatbot-input');
+const chatbotSendBtn = document.getElementById('chatbot-send-btn');
+
+// Bật / Ẩn cửa sổ chat
+if (chatbotToggleBtn) {
+    chatbotToggleBtn.addEventListener('click', () => chatbotWindow.classList.toggle('hidden'));
+}
+if (chatbotCloseBtn) {
+    chatbotCloseBtn.addEventListener('click', () => chatbotWindow.classList.add('hidden'));
+}
+
+// Hàm thêm tin nhắn vào màn hình chat
+function appendMessage(text, sender) {
+    const msgDiv = document.createElement('div');
+    msgDiv.classList.add('message', sender === 'user' ? 'user-msg' : 'bot-msg');
+    msgDiv.innerText = text;
+    chatbotMessages.appendChild(msgDiv);
+    chatbotMessages.scrollTop = chatbotMessages.scrollHeight; // Tự cuộn xuống cuối
+    return msgDiv;
+}
+
+// Hàm gọi API Gemini
+// script/index.js
+
+// URL nội bộ của Netlify tự động nhận diện khi deploy
+const NETLIFY_FUNCTION_URL = "/.netlify/functions/gemini";
+
+async function askGemini(userMessage) {
+    const loadingDiv = document.createElement('div');
+    loadingDiv.classList.add('message', 'loading-msg');
+    loadingDiv.innerText = "Trợ lý đang gõ... ⏳";
+    chatbotMessages.appendChild(loadingDiv);
+    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+
+    try {
+        // Gọi lên Serverless Function của bạn thay vì gọi trực tiếp Google
+        const response = await fetch(NETLIFY_FUNCTION_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: userMessage }) // Chỉ bắn tin nhắn lên, không kèm Key
+        });
+
+        const data = await response.json();
+        loadingDiv.remove();
+
+        if (data.candidates && data.candidates[0].content.parts[0].text) {
+            let reply = data.candidates[0].content.parts[0].text;
+            appendMessage(reply, 'bot');
+        } else {
+            appendMessage("Huhu, hệ thống đang bận một chút, bạn thử lại sau giây lát nhé!", 'bot');
+        }
+    } catch (error) {
+        console.error("Lỗi Chatbot:", error);
+        loadingDiv.remove();
+        appendMessage("Không thể kết nối với trí tuệ nhân tạo. Hãy kiểm tra mạng mạng nè!", 'bot');
+    }
+}
+// Xử lý gửi tin nhắn
+function handleChatSubmit() {
+    const text = chatbotInput.value.trim();
+    if (!text) return;
+
+    appendMessage(text, 'user');
+    chatbotInput.value = ''; // Xóa ô nhập
+    
+    askGemini(text); // Gửi sang AI xử lý
+}
+
+if (chatbotSendBtn && chatbotInput) {
+    chatbotSendBtn.addEventListener('click', handleChatSubmit);
+    chatbotInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') handleChatSubmit();
+    });
+}
