@@ -228,10 +228,39 @@ async function askGemini(userMessage) {
         appendMessage("Không thể kết nối với trí tuệ nhân tạo. Hãy kiểm tra mạng mạng nè!", 'bot');
     }
 }
+
 // Xử lý gửi tin nhắn
 function handleChatSubmit() {
     const text = chatbotInput.value.trim();
     if (!text) return;
+
+    // ========================================================
+    // 🛡️ CHẶN RATE LIMIT: GIỚI HẠN 10 CÂU CHAT / NGÀY TẠI LOCAL
+    // ========================================================
+    const MAX_CHATS_PER_DAY = 10;
+    const todayStr = new Date().toDateString(); // Định dạng chuỗi ngày cố định (VD: "Tue Jun 09 2026")
+    
+    let savedDate = localStorage.getItem('chatbot_chat_date');
+    let currentChatCount = parseInt(localStorage.getItem('chatbot_chat_count')) || 0;
+
+    // Kiểm tra xem có phải ngày mới hoàn toàn không
+    if (savedDate !== todayStr) {
+        // Nếu qua ngày mới, đặt lại ngày hôm nay và reset bộ đếm về 0
+        localStorage.setItem('chatbot_chat_date', todayStr);
+        currentChatCount = 0;
+        localStorage.setItem('chatbot_chat_count', currentChatCount);
+    }
+
+    // Nếu đã chạm hoặc vượt ngưỡng giới hạn trong ngày
+    if (currentChatCount >= MAX_CHATS_PER_DAY) {
+        appendMessage("Trợ lý của DongDev tạm thời bận rồi. Hãy quay lại vào ngày mai, hoặc liên hệ trực tiếp với DongDev qua email johnyduong.vn@gmail.com nhé! 🚀", 'bot');
+        chatbotInput.value = ''; // Xóa sạch dữ liệu trong ô nhập
+        return; // Ngăn chặn không cho thực thi tiếp
+    }
+
+    // Cập nhật tăng số lượt chat lên 1 đơn vị và lưu lại
+    localStorage.setItem('chatbot_chat_count', currentChatCount + 1);
+    // ========================================================
 
     appendMessage(text, 'user');
     chatbotInput.value = ''; // Xóa ô nhập

@@ -1,3 +1,9 @@
+// Hàm hỗ trợ kiểm tra độ dài dữ liệu (Đặt bên ngoài)
+function validateInputLength(str, min, max) {
+    return str.length >= min && str.length <= max;
+}
+
+// Xử lý sự kiện click sao chép Email
 function copyArticleLink() {
                 const currentUrl = window.location.href;
                 navigator.clipboard.writeText(currentUrl).then(() => {
@@ -71,6 +77,12 @@ document.addEventListener("DOMContentLoaded", function () {
         const content = contentInput.value.trim();
         const dateStr = new Date().toLocaleString("vi-VN", { hour: '2-digit', minute:'2-digit', day: '2-digit', month: '2-digit', year: 'numeric' });
 
+        // === KIỂM TRA ĐỘ DÀI DỮ LIỆU TRƯỚC TIÊN ===
+        if (!validateInputLength(content, 10, 5000)) {
+            alert("Lời nhắn quá ngắn (dưới 10 ký tự) hoặc quá dài (trên 5000 ký tự)! Vui lòng bổ sung thêm thông tin.");
+            return; // Dừng lại tại đây khi nút gửi CHƯA bị khóa
+        }
+
         // === 1. LẤY VÀ KIỂM TRA TOKEN HCAPTCHA ===
         const hCaptchaInput = commentForm.querySelector('[name="h-captcha-response"]');
         const hCaptchaToken = hCaptchaInput ? hCaptchaInput.value : "";
@@ -136,3 +148,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // Chạy tải bình luận ngay khi vào trang
     loadComments();
 });
+
+// Chống Clickjacking
+if (window.self !== window.top) {
+    window.top.location = window.self.location; // Ép trình duyệt thoát khỏi iframe giả mạo
+}
