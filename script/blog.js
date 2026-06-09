@@ -203,28 +203,95 @@ document.addEventListener("DOMContentLoaded", function () {
     loadComments();
 });
 
-// Lấy các phần tử từ HTML
+// ========================================================
+// 🎵 PHẦN 3: ĐIỀU KHIỂN TRÌNH PHÁT NHẠC (CÓ BỌC CHỐNG LỖI)
+// ========================================================
 const musicToggleBtn = document.getElementById('musicToggleBtn');
 const musicPlayerBox = document.getElementById('musicPlayerBox');
 const minimizeMusicBtn = document.getElementById('minimizeMusicBtn');
 
-// Mở khung nhạc: Bỏ class 'hidden' của khung, ẩn nút tròn 🎶
-musicToggleBtn.addEventListener('click', function() {
-    musicPlayerBox.classList.remove('hidden');
-    musicToggleBtn.style.display = 'none';
+// Chỉ chạy nếu trang đó có tồn tại khung nhạc (Tránh lỗi sập script ở trang chủ)
+if (musicToggleBtn && musicPlayerBox && minimizeMusicBtn) {
+    musicToggleBtn.addEventListener('click', function() {
+        musicPlayerBox.classList.remove('hidden');
+        musicToggleBtn.style.display = 'none';
+    });
+
+    minimizeMusicBtn.addEventListener('click', function() {
+        musicPlayerBox.classList.add('hidden');
+        musicToggleBtn.style.display = 'flex';
+    });
+}
+
+/* ========================================================
+   ⏱️ HÀM TỰ ĐỘNG TÍNH THỜI GIAN ĐỌC BÀI (READING TIME)
+======================================================== */
+document.addEventListener('DOMContentLoaded', function() {
+    
+    const WORDS_PER_MINUTE = 230;
+    // ĐỒNG NHẤT: Hãy chắc chắn các trang con dùng class này để bọc nội dung bài viết
+    const CONTENT_CLASS = '.article-content'; 
+
+    // --- TRƯỜNG HỢP 1: NGƯỜI DÙNG ĐANG Ở TRANG CON ---
+    const blogContent = document.querySelector(CONTENT_CLASS);
+    const localReadTime = document.querySelector('.article-header .read-time'); 
+
+    if (blogContent && localReadTime) {
+        const text = blogContent.innerText || blogContent.textContent;
+        const words = text.trim().split(/\s+/).filter(word => word.length > 0).length;
+        const readingTime = Math.ceil(words / WORDS_PER_MINUTE);
+        
+        localReadTime.innerHTML = `⏱️ ${readingTime} min read`;
+    }
+
+
+    // --- TRƯỜNG HỢP 2: NGƯỜI DÙNG ĐANG Ở TRANG CHÍNH ---
+    // Gộp cả bài viết nổi bật (.featured-content) và bài viết thường (.post-data)
+    const blogCards = document.querySelectorAll('.post-data, .featured-content'); 
+
+    if (blogCards.length > 0) {
+        blogCards.forEach(async (card) => {
+            const linkElement = card.querySelector('a'); 
+            const timeTarget = card.querySelector('.read-time'); 
+
+            if (linkElement && timeTarget) {
+                const postLink = linkElement.getAttribute('href');
+                
+                // Bỏ qua nếu là link trống hoặc link hashtag tránh lỗi loop fetch
+                if (!postLink || postLink === '#' || postLink === '') {
+                    timeTarget.innerHTML = `⏱️ -- min read`;
+                    return;
+                }
+                
+                try {
+                    const response = await fetch(postLink);
+                    if (!response.ok) throw new Error("Không tải được trang");
+                    const htmlText = await response.text();
+                    
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(htmlText, 'text/html');
+                    
+                    // Tìm chính xác theo CONTENT_CLASS đã đồng nhất ở trên
+                    const article = doc.querySelector(CONTENT_CLASS);
+                    if (article) {
+                        const text = article.innerText || article.textContent;
+                        const words = text.trim().split(/\s+/).filter(w => w.length > 0).length;
+                        const readingTime = Math.ceil(words / WORDS_PER_MINUTE);
+                        
+                        timeTarget.innerHTML = `⏱️ ${readingTime} min read`;
+                    } else {
+                        // Nếu trang con chưa đổi class hoặc trống chữ
+                        timeTarget.innerHTML = `⏱️ 2 phút đọc`; 
+                    }
+                } catch (error) {
+                    console.error("Lỗi tính thời gian cho bài: " + postLink);
+                }
+            }
+        });
+    }
 });
 
-// Thu nhỏ khung nhạc: Thêm class 'hidden' vào khung, hiện lại nút tròn 🎶
-minimizeMusicBtn.addEventListener('click', function() {
-    musicPlayerBox.classList.add('hidden');
-    musicToggleBtn.style.display = 'flex';
-});
-
-// Khởi tạo trạng thái ban đầu:
-// Đoạn code HTML phía trên đã để class="floating-player hidden", 
-// tức là vừa vào web sẽ chỉ thấy nút tròn 🎶 rất gọn gàng!
-
-// Chống tấn công Clickjacking (Bảo mật nâng cao)
+// Chống tấn công Clickjacking
 if (window.self !== window.top) {
     window.top.location = window.self.location;
 }
