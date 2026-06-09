@@ -339,6 +339,32 @@ sudo tailscale up</pre>
             </article>
         </main>
 
+        <div class="music-widget">
+            
+            <button id="musicToggleBtn" class="music-toggle-btn" title="Mở trình phát nhạc">🎶</button>
+            
+            <div id="musicPlayerBox" class="floating-player hidden">
+                
+                <button id="minimizeMusicBtn" class="minimize-music-btn" title="Thu nhỏ">✖</button>
+                
+                <p class="player-title">🎧 Dong's Aesthetic Vibes</p>
+                
+                <div class="track-info-container">
+                    <div class="track-info-scroller">
+                    <!-- Đổi tên bài hát & tác giả ở đây -->
+                    <span class="track-name">🎵 Wildfire (feat. Jonathan Steingard)</span>
+                    <!-- Lặp lại chính xác dòng trên thêm 1 lần để chữ chạy thành vòng lặp liên tục -->
+                    <span class="track-name">🎵 Wildfire (feat. Jonathan Steingard)</span>
+                    </div>
+                </div>
+
+                <audio controls loop>
+                <source src="../assets/musics/Wildfire.mp3" type="audio/mpeg">
+                    Trình duyệt của bạn không hỗ trợ thẻ audio.
+                </audio>
+            </div>
+        </div>
+
         <footer class="blog-footer">
             <p>© 2026 DongDev Notes. Crafted for sharing insights.</p>
         </footer>

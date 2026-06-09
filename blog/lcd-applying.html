@@ -416,21 +416,30 @@ void loop() {
             </article>
         </main>
 
-        <div class="floating-player">
-            <p class="player-title">🎧 Dong's Aesthetic Vibes</p>
-            <!-- Khu vực tên bài hát chạy ngang -->
-            <div class="track-info-container">
-                <div class="track-info-scroller">
+        <div class="music-widget">
+            
+            <button id="musicToggleBtn" class="music-toggle-btn" title="Mở trình phát nhạc">🎶</button>
+            
+            <div id="musicPlayerBox" class="floating-player hidden">
+                
+                <button id="minimizeMusicBtn" class="minimize-music-btn" title="Thu nhỏ">✖</button>
+                
+                <p class="player-title">🎧 Dong's Aesthetic Vibes</p>
+                
+                <div class="track-info-container">
+                    <div class="track-info-scroller">
                     <!-- Đổi tên bài hát & tác giả ở đây -->
                     <span class="track-name">🎵 Samuel Kim - I Really Want To Stay At Your House</span>
                     <!-- Lặp lại chính xác dòng trên thêm 1 lần để chữ chạy thành vòng lặp liên tục -->
                     <span class="track-name">🎵 Samuel Kim - I Really Want To Stay At Your House</span>
+                    </div>
                 </div>
-            </div>
-            <audio controls loop>
+
+                <audio controls loop>
                 <source src="../assets/musics/Samuel_Kim_Lorien_-_I_Really_Want_to_Stay_at_Your_House_(mp3.pm).mp3" type="audio/mpeg">
-                Trình duyệt của bạn không hỗ trợ thẻ audio.
-            </audio>
+                    Trình duyệt của bạn không hỗ trợ thẻ audio.
+                </audio>
+            </div>
         </div>
 
         <footer class="blog-footer">

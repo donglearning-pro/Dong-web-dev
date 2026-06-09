@@ -679,6 +679,85 @@ body.dark-mode .player-title {
     color: #e5e7eb;
 }
 
+/* ==========================================
+    🔄 CSS CHO NÚT THU NHỎ & NÚT TRÒN
+    ========================================== */
+    
+/* Nút tròn nổi 🎶 */
+.music-toggle-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #1f2937; /* Màu nền tối nhìn rất sang */
+    color: #fff;
+    font-size: 20px;
+    border: 2px solid #38bdf8;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    cursor: pointer;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+}
+
+.music-toggle-btn:hover {
+    transform: scale(1.1); /* Phóng to nhẹ khi di chuột vào */
+}
+
+/* Cập nhật lại khung nhạc để có hiệu ứng chuyển động */
+.floating-player {
+    position: fixed;
+    bottom: 80px; /* Đẩy khung lên cao một chút để nhường chỗ cho nút tròn */
+    right: 20px;
+    background: #ffffff;
+    padding: 12px 16px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e5e7eb;
+    z-index: 9998;
+    /* Hiệu ứng trượt và mờ dần */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    transform-origin: bottom right; /* Thu nhỏ dần về góc dưới bên phải */
+}
+
+/* Class 'hidden' để thu nhỏ khung nhạc lại */
+.floating-player.hidden {
+    opacity: 0;
+    transform: translateY(20px) scale(0.8);
+    pointer-events: none; /* Không cho phép click khi đã ẩn */
+}
+
+/* Nút ✖ thu nhỏ ở góc phải khung nhạc */
+.minimize-music-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: none;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    color: #6b7280;
+    padding: 4px;
+}
+
+.minimize-music-btn:hover {
+    color: #ef4444; /* Đổi màu đỏ khi di chuột */
+}
+
+/* Cho nút ✖ màu trắng trên Dark Mode */
+body.dark-mode .minimize-music-btn {
+    color: #9ca3af;
+}
+body.dark-mode .minimize-music-btn:hover {
+    color: #f87171;
+}
+
 /* FOOTER */
 .blog-footer {
     text-align: center;

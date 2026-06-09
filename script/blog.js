@@ -203,6 +203,27 @@ document.addEventListener("DOMContentLoaded", function () {
     loadComments();
 });
 
+// Lấy các phần tử từ HTML
+const musicToggleBtn = document.getElementById('musicToggleBtn');
+const musicPlayerBox = document.getElementById('musicPlayerBox');
+const minimizeMusicBtn = document.getElementById('minimizeMusicBtn');
+
+// Mở khung nhạc: Bỏ class 'hidden' của khung, ẩn nút tròn 🎶
+musicToggleBtn.addEventListener('click', function() {
+    musicPlayerBox.classList.remove('hidden');
+    musicToggleBtn.style.display = 'none';
+});
+
+// Thu nhỏ khung nhạc: Thêm class 'hidden' vào khung, hiện lại nút tròn 🎶
+minimizeMusicBtn.addEventListener('click', function() {
+    musicPlayerBox.classList.add('hidden');
+    musicToggleBtn.style.display = 'flex';
+});
+
+// Khởi tạo trạng thái ban đầu:
+// Đoạn code HTML phía trên đã để class="floating-player hidden", 
+// tức là vừa vào web sẽ chỉ thấy nút tròn 🎶 rất gọn gàng!
+
 // Chống tấn công Clickjacking (Bảo mật nâng cao)
 if (window.self !== window.top) {
     window.top.location = window.self.location;
