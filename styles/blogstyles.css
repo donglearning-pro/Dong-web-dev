@@ -1,26 +1,74 @@
-/* Variables & System Setup */
+/* ==========================================
+   🎨 VARIABLES & THEME MANAGEMENT
+   ========================================== */
 :root {
+    /* --- LIGHT MODE (Mặc định) --- */
     --bg-color: #fcfcfd;
     --surface-color: #ffffff;
-    --text-main: #111827;
-    --text-muted: #4b5563;
-    --accent-primary: #4f46e5; /* Indigo */
+    --surface-muted: #f9fafb;     /* Nền form comment */
+    --text-main: #111827;         /* Chữ chính */
+    --text-muted: #4b5563;        /* Chữ phụ */
+    --text-body: #374151;         /* Chữ nội dung bài viết/comment */
+    --accent-primary: #4f46e5;    /* Indigo */
     
-    /* Category Tag Colors */
+    /* Đường viền & Nút bấm */
+    --border-color: #f3f4f6;       /* Viền nhẹ (Navbar, Footer) */
+    --border-strong: #e5e7eb;      /* Viền thẻ, nút lọc */
+    --border-hover: #d1d5db;       /* Viền khi hover hoặc lấy nét input */
+    --navbar-bg: rgba(255, 255, 255, 0.8);
+    --input-bg: #ffffff;
+    --btn-submit-bg: #111827;
+    --btn-submit-text: #ffffff;
+    --code-border: #333333;
+    
+    /* Category Tag Colors (Giữ nguyên độ rực rỡ) */
     --color-ai: #ef4444;       /* Coral Red */
     --color-arduino: #0ea5e9;  /* Cyan Tech */
     --color-books: #f59e0b;    /* Warm Amber */
     --color-life: #10b981;    /* Emerald Green */
     
+    /* Đổ bóng */
     --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
     --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+body.dark-mode {
+    /* --- DARK MODE OVERRIDES (Tông Slate cao cấp) --- */
+    --bg-color: #0f172a;           /* Slate 900 */
+    --surface-color: #1e293b;      /* Slate 800 */
+    --surface-muted: #1e293b;      /* Slate 800 */
+    --text-main: #f9fafb;          /* Slate 50 */
+    --text-muted: #9ca3af;         /* Slate 400 */
+    --text-body: #e2e8f0;          /* Slate 200 */
+    
+    /* Đường viền & Nút bấm tối */
+    --border-color: rgba(255, 255, 255, 0.06);
+    --border-strong: rgba(255, 255, 255, 0.12);
+    --border-hover: rgba(255, 255, 255, 0.25);
+    --navbar-bg: rgba(15, 23, 42, 0.8);
+    --input-bg: #1e293b;
+    --btn-submit-bg: #f9fafb;
+    --btn-submit-text: #0f172a;
+    --code-border: #475569;        /* Slate 600 */
+    
+    /* Đổ bóng đổ sâu hơn cho nền tối */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+}
+
+/* ==========================================
+   🧱 BASE RESET & GLOBAL STYLES
+   ========================================== */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+    transition: background-color 0.3s ease;
 }
 
 body {
@@ -28,16 +76,19 @@ body {
     background-color: var(--bg-color);
     color: var(--text-main);
     line-height: 1.625;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* NAVBAR */
 .blog-navbar {
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: var(--navbar-bg);
     backdrop-filter: blur(12px);
-    border-bottom: 1px solid #f3f4f6;
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-color);
     position: sticky;
     top: 0;
     z-index: 100;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .nav-container {
@@ -55,10 +106,17 @@ body {
     text-decoration: none;
     color: var(--text-main);
     letter-spacing: -0.5px;
+    transition: color 0.3s;
 }
 
 .blog-logo span {
     color: var(--accent-primary);
+}
+
+.blog-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 24px;
 }
 
 .blog-nav-links a {
@@ -73,6 +131,25 @@ body {
     color: var(--accent-primary);
 }
 
+/* 🌙 STYLE NÚT CHUYỂN ĐỔI GIAO DIỆN (THEME TOGGLE BUTTON) */
+.theme-btn {
+    background: none;
+    border: 1px solid var(--border-color);
+    padding: 8px 12px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-smooth);
+}
+
+.theme-btn:hover {
+    background-color: var(--secondary-bg);
+    transform: scale(1.1);
+}
+
 /* MAIN CONTAINER */
 .blog-main {
     max-width: 1140px;
@@ -80,6 +157,9 @@ body {
     padding: 40px 24px;
 }
 
+/* ==========================================
+   📰 ARTICLE & GRID LAYOUTS
+   ========================================== */
 /* FEATURED ARTICLE */
 .featured-section {
     margin-bottom: 50px;
@@ -92,7 +172,8 @@ body {
     display: grid;
     grid-template-columns: 1.2fr 1fr;
     box-shadow: var(--shadow-md);
-    border: 1px solid #f3f4f6;
+    border: 1px solid var(--border-color);
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .featured-img img {
@@ -131,6 +212,7 @@ body {
     color: var(--text-muted);
     margin-bottom: 16px;
     display: block;
+    transition: color 0.3s;
 }
 
 .featured-content h2 {
@@ -139,12 +221,14 @@ body {
     line-height: 1.25;
     margin-bottom: 16px;
     letter-spacing: -0.5px;
+    color: var(--text-main);
 }
 
 .featured-content p {
     color: var(--text-muted);
     margin-bottom: 24px;
     font-size: 1.05rem;
+    transition: color 0.3s;
 }
 
 .btn-read {
@@ -167,12 +251,11 @@ body {
     padding-bottom: 8px;
 }
 
-/* Ẩn thanh cuộn trên Chrome/Safari */
 .category-bar::-webkit-scrollbar { display: none; }
 
 .cat-btn {
     background: var(--surface-color);
-    border: 1px solid #e5e7eb;
+    border: 1px solid var(--border-strong);
     padding: 10px 20px;
     border-radius: 30px;
     font-family: inherit;
@@ -185,9 +268,9 @@ body {
 }
 
 .cat-btn:hover, .cat-btn.active {
-    background: var(--text-main);
-    color: #ffffff;
-    border-color: var(--text-main);
+    background: var(--btn-submit-bg);
+    color: var(--btn-submit-text);
+    border-color: var(--btn-submit-bg);
 }
 
 /* POSTS GRID */
@@ -202,7 +285,7 @@ body {
     border-radius: 20px;
     overflow: hidden;
     box-shadow: var(--shadow-sm);
-    border: 1px solid #e5e7eb;
+    border: 1px solid var(--border-strong);
     display: flex;
     flex-direction: column;
     transition: var(--transition);
@@ -211,7 +294,7 @@ body {
 .post-card:hover {
     transform: translateY(-4px);
     box-shadow: var(--shadow-md);
-    border-color: #d1d5db;
+    border-color: var(--border-hover);
 }
 
 .post-img {
@@ -242,12 +325,14 @@ body {
     font-weight: 700;
     line-height: 1.4;
     margin-bottom: 10px;
+    color: var(--text-main);
 }
 
 .post-data p {
     color: var(--text-muted);
     font-size: 0.95rem;
     margin-bottom: 20px;
+    transition: color 0.3s;
 }
 
 .post-link {
@@ -263,39 +348,28 @@ body {
     color: var(--accent-primary);
 }
 
-/* FOOTER */
-.blog-footer {
-    text-align: center;
-    padding: 40px;
-    margin-top: 60px;
-    border-top: 1px solid #f3f4f6;
-    color: var(--text-muted);
-    font-size: 0.9rem;
-}
-
-/* CẬP NHẬT CSS CHO VÙNG SHOW CODE (Sửa lại vùng .code-block cũ) */
+/* ==========================================
+   💻 CODE SYNTAX HIGHLIGHTER (PRISM)
+   ========================================== */
 .code-block {
-    /* Đổi nền tối hơn cho hợp theme Okaidia */
     background-color: #1e1e1e !important; 
     border-radius: 12px;
     margin: 30px 0;
-    /* Thêm hiệu ứng đổ bóng cho chuyên nghiệp */
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
-    overflow: hidden; /* Bo góc cả phần code bên trong */
-    border: 1px solid #333;
+    overflow: hidden; 
+    border: 1px solid var(--code-border);
+    transition: border-color 0.3s;
 }
 
-/* Prism thường áp dụng style trực tiếp lên thẻ pre, chúng ta CSS thêm cho nó */
 pre[class*="language-"] {
-    margin: 0 !important; /* Xóa margin mặc định của Prism để nó chui gọn vào khung */
-    padding: 24px !important; /* Khoảng cách từ code tới mép khung */
-    background: transparent !important; /* Dùng nền tối của vùng .code-block bên ngoài */
+    margin: 0 !important; 
+    padding: 24px !important; 
+    background: transparent !important; 
     font-family: 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace !important;
     font-size: 0.95rem !important;
     line-height: 1.6 !important;
 }
 
-/* Tùy chỉnh màu thanh cuộn scrollbar cho tối đồng bộ */
 pre::-webkit-scrollbar {
     height: 8px;
     width: 8px;
@@ -312,61 +386,75 @@ pre::-webkit-scrollbar-thumb {
     border-radius: 4px;
 }
 pre::-webkit-scrollbar-thumb:hover {
-    background: var(--accent-primary); /* Đổi thành biến đã có để hiển thị màu tím indigo */
+    background: var(--accent-primary); 
 }
 
-/* --- Comment Section Styling --- */
+/* ==========================================
+   💬 COMMENT & INTERACTION SECTIONS
+   ========================================== */
 .comment-section {
     margin-top: 50px;
     padding-top: 30px;
-    border-top: 2px solid #f3f4f6;
+    border-top: 2px solid var(--border-color);
+    transition: border-color 0.3s;
 }
+
 .comment-section h3 {
     font-size: 1.5rem;
     font-weight: 700;
     color: var(--text-main);
     margin-bottom: 6px;
 }
+
 .comment-subtitle {
     font-size: 0.95rem;
     color: var(--text-muted);
     margin-bottom: 24px;
+    transition: color 0.3s;
 }
+
 .comment-form {
     display: flex;
     flex-direction: column;
     gap: 16px;
-    background: #f9fafb;
+    background: var(--surface-muted);
     padding: 24px;
     border-radius: 12px;
-    border: 1px solid #e5e7eb;
+    border: 1px solid var(--border-strong);
+    transition: background-color 0.3s, border-color 0.3s;
 }
+
 .form-row {
     display: flex;
     gap: 16px;
 }
+
 .form-row input, .form-row textarea {
     flex: 1;
     padding: 12px 16px;
-    border: 1px solid #d1d5db;
+    border: 1px solid var(--border-strong);
     border-radius: 8px;
     font-family: inherit;
     font-size: 1rem;
-    background-color: #ffffff;
+    background-color: var(--input-bg);
+    color: var(--text-main);
     transition: all 0.2s ease;
 }
+
 .form-row input:focus, .form-row textarea:focus {
     outline: none;
     border-color: var(--accent-primary);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
 }
+
 @media (max-width: 600px) {
     .form-row { flex-direction: column; }
 }
+
 .btn-submit-comment {
     align-self: flex-start;
-    background-color: var(--text-main);
-    color: #ffffff;
+    background-color: var(--btn-submit-bg);
+    color: var(--btn-submit-text);
     border: none;
     padding: 12px 24px;
     font-size: 1rem;
@@ -378,8 +466,9 @@ pre::-webkit-scrollbar-thumb:hover {
     gap: 8px;
     transition: all 0.2s ease;
 }
+
 .btn-submit-comment:hover {
-    background-color: #1f2937;
+    filter: brightness(0.9);
     transform: translateY(-1px);
 }
 
@@ -387,60 +476,75 @@ pre::-webkit-scrollbar-thumb:hover {
 .comments-container {
     margin-top: 40px;
 }
+
 .comments-container h4 {
     font-size: 1.2rem;
     color: var(--text-main);
     margin-bottom: 16px;
     padding-bottom: 8px;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid var(--border-strong);
+    transition: border-color 0.3s;
 }
+
 .comments-list {
     display: flex;
     flex-direction: column;
     gap: 16px;
 }
+
 .comment-card {
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
+    background: var(--surface-color);
+    border: 1px solid var(--border-strong);
     padding: 16px;
     border-radius: 10px;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    box-shadow: var(--shadow-sm);
+    transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
 }
+
 .comment-card-header {
     display: flex;
     justify-content: space-between;
     margin-bottom: 8px;
 }
+
 .comment-author {
     font-weight: 700;
     color: var(--text-main);
 }
+
 .comment-time {
     font-size: 0.85rem;
     color: var(--text-muted);
+    transition: color 0.3s;
 }
+
 .comment-body {
     font-size: 1rem;
-    color: #374151;
+    color: var(--text-body);
     line-height: 1.5;
+    transition: color 0.3s;
 }
 
 /* Khu vực nút Share / Copy Link */
 .share-container {
     margin: 40px 0;
     padding: 24px 0;
-    border-top: 1px dashed #e5e7eb;
-    border-bottom: 1px dashed #e5e7eb;
+    border-top: 1px dashed var(--border-strong);
+    border-bottom: 1px dashed var(--border-strong);
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 12px;
+    transition: border-color 0.3s;
 }
+
 .share-text {
     font-size: 0.95rem;
     font-weight: 600;
     color: var(--text-muted);
+    transition: color 0.3s;
 }
+
 .btn-copy-link {
     background-color: var(--accent-primary);
     color: #ffffff;
@@ -457,18 +561,35 @@ pre::-webkit-scrollbar-thumb:hover {
     box-shadow: var(--shadow-sm);
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
 .btn-copy-link:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
     filter: brightness(1.1);
 }
+
 .btn-copy-link:active {
     transform: translateY(0);
 }
+
 .btn-copy-link.copied {
     background-color: var(--color-life) !important;
 }
-/* RESPONSIVE LAYOUT */
+
+/* FOOTER */
+.blog-footer {
+    text-align: center;
+    padding: 40px;
+    margin-top: 60px;
+    border-top: 1px solid var(--border-color);
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    transition: border-color 0.3s, color 0.3s;
+}
+
+/* ==========================================
+   📱 RESPONSIVE LAYOUT
+   ========================================== */
 @media (max-width: 900px) {
     .featured-card {
         grid-template-columns: 1fr;

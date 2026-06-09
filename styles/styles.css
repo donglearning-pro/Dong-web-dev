@@ -1,8 +1,25 @@
-/* Variables for easy styling management */
+/* ==========================================
+   🎨 VARIABLES MANAGEMENT & THEMING
+   ========================================== */
 :root {
+    /* --- LIGHT MODE (Default) --- */
     --primary-color: #6366f1; /* Modern Indigo purple */
-    --text-color: #1f2937;
-    --light-bg: #f9fafb;
+    --text-color: #1f2937;    /* Slate 800 */
+    --text-muted: #4b5563;    /* Slate 600 */
+    --text-light: #64748b;    /* Slate 500 */
+    --light-bg: #f9fafb;      /* Main background */
+    --card-bg: #ffffff;       /* Card background */
+    --secondary-bg: #f8fafc;  /* Soft grey block background */
+    --navbar-bg: rgba(255, 255, 255, 0.85);
+    --border-color: rgba(0, 0, 0, 0.05);
+    --border-input: #cbd5e1;
+
+    /* Chatbot specific colors (Light) */
+    --chat-bg: #f3f4f6;
+    --chat-bot-msg: #ffffff;
+    --chat-bot-text: #1f2937;
+
+    /* Shadows & Transitions */
     --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
     --card-hover-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.15), 0 10px 10px -5px rgba(99, 102, 241, 0.04);
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -12,7 +29,26 @@
     --color-arduino: #0ea5e9;  /* Cyan Tech */
     --color-books: #f59e0b;    /* Warm Amber */
     --color-life: #10b981;    /* Emerald Green */
+}
 
+body.dark-mode {
+    /* --- DARK MODE OVERRIDES --- */
+    --text-color: #f9fafb;     /* Slate 50 */
+    --text-muted: #d1d5db;     /* Slate 300 */
+    --text-light: #9ca3af;     /* Slate 400 */
+    --light-bg: #0f172a;       /* Slate 900 */
+    --card-bg: #1e293b;        /* Slate 800 */
+    --secondary-bg: #1e293b;   /* Slate 800 */
+    --navbar-bg: rgba(15, 23, 42, 0.85);
+    --border-color: rgba(255, 255, 255, 0.08);
+    --border-input: #334155;
+
+    /* Chatbot specific colors (Dark) */
+    --chat-bg: #0f172a;
+    --chat-bot-msg: #334155;
+    --chat-bot-text: #f9fafb;
+
+    --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
 }
 
 /* Base reset and smooth scrolling */
@@ -27,16 +63,21 @@ html {
     font-family: 'Plus Jakarta Sans', sans-serif;
     color: var(--text-color);
     background-color: var(--light-bg);
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 body {
     min-height: 100vh;
     line-height: 1.6;
+    background-color: var(--light-bg);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* GENERAL SECTIONS */
 section {
     padding: 80px 10%;
+    transition: background-color 0.3s ease;
 }
 
 h2 {
@@ -45,6 +86,7 @@ h2 {
     text-align: center;
     margin-bottom: 40px;
     position: relative;
+    color: var(--text-color);
 }
 
 h2::after {
@@ -66,9 +108,11 @@ h2::after {
     justify-content: space-between;
     align-items: center;
     padding: 15px 10%;
-    background-color: rgba(255, 255, 255, 0.85);
+    background-color: var(--navbar-bg);
     backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border-color);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .logo {
@@ -102,11 +146,12 @@ h2::after {
     display: flex;
     list-style: none;
     gap: 30px;
+    align-items: center;
 }
 
 .nav-links a {
     text-decoration: none;
-    color: #4b5563;
+    color: var(--text-muted);
     font-weight: 600;
     font-size: 0.95rem;
     transition: var(--transition-smooth);
@@ -116,6 +161,25 @@ h2::after {
     color: var(--primary-color);
 }
 
+/* 🌙 STYLE NÚT CHUYỂN ĐỔI GIAO DIỆN (THEME TOGGLE BUTTON) */
+.theme-btn {
+    background: none;
+    border: 1px solid var(--border-color);
+    padding: 8px 12px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-smooth);
+}
+
+.theme-btn:hover {
+    background-color: var(--secondary-bg);
+    transform: scale(1.1);
+}
+
 /* HERO SECTION (WELCOME) */
 .Welcome {
     height: 80vh;
@@ -123,8 +187,8 @@ h2::after {
     justify-content: center;
     align-items: center;
     text-align: center;
-    background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.1), transparent), 
-                radial-gradient(circle at bottom left, rgba(168, 85, 247, 0.05), transparent);
+    background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.08), transparent), 
+                radial-gradient(circle at bottom left, rgba(168, 85, 247, 0.04), transparent);
 }
 
 .welcome-content h1 {
@@ -132,11 +196,12 @@ h2::after {
     font-weight: 800;
     margin-bottom: 15px;
     letter-spacing: -1px;
+    color: var(--text-color);
 }
 
 .welcome-content p {
     font-size: 1.2rem;
-    color: #6b7280;
+    color: var(--text-light);
     margin-bottom: 30px;
 }
 
@@ -163,7 +228,7 @@ h2::after {
     justify-content: space-between;
     align-items: center;
     gap: 50px;
-    background-color: white;
+    background-color: var(--card-bg);
 }
 
 .Describe-me {
@@ -180,7 +245,7 @@ h2::after {
 
 .Describe-me p {
     font-size: 1.1rem;
-    color: #4b5563;
+    color: var(--text-muted);
     margin-bottom: 15px;
 }
 
@@ -238,7 +303,7 @@ h2::after {
 .project-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.2));
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.3));
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -275,9 +340,9 @@ h2::after {
 .project-space { background-image: url("/assets/index-materials/nasa.webp"); background-size: cover; background-position: center; }
 .project-passenger-counter { background-image: url("/assets/index-materials/passenger-counter.webp"); background-size: cover; background-position: center; }
 
-/* ACHIEVEMENTS GRID (Nâng cấp thành các ô click được) */
+/* ACHIEVEMENTS GRID */
 .achievements-section {
-    background-color: white;
+    background-color: var(--card-bg);
 }
 
 .achievements-grid {
@@ -301,7 +366,7 @@ h2::after {
     border-radius: 16px;
     border-left: 5px solid var(--primary-color);
     box-shadow: var(--card-shadow);
-    height: 100%; /* Đảm bảo các ô cao bằng nhau trong Grid */
+    height: 100%;
     transition: var(--transition-smooth);
 }
 
@@ -318,12 +383,11 @@ h2::after {
 }
 
 .achievement-info p {
-    color: #4b5563;
+    color: var(--text-muted);
     font-size: 0.95rem;
     margin-bottom: 12px;
 }
 
-/* Nút nhỏ chỉ dẫn Click xem minh chứng */
 .view-proof {
     display: inline-block;
     font-size: 0.85rem;
@@ -332,72 +396,29 @@ h2::after {
     transition: var(--transition-smooth);
 }
 
-/* Hiệu ứng di chuột vào ô Thành Tích */
 .achievement-card-link:hover .achievement-item {
     transform: translateY(-5px);
     box-shadow: var(--card-hover-shadow);
-    background-color: #ffffff;
-    border-left-color: #a855f7; /* Đổi màu viền khi hover sang ánh tím hồng */
+    background-color: var(--card-bg);
+    border-left-color: #a855f7;
 }
 
 .achievement-card-link:hover .view-proof {
-    padding-left: 5px; /* Hiệu ứng chữ dịch chuyển nhẹ */
+    padding-left: 5px;
     color: #a855f7;
-}
-
-/* FOOTER */
-.link {
-    background-color: #111827;
-    color: white;
-    padding: 50px 10%;
-    text-align: center;
-}
-
-.link h3 {
-    font-size: 1.5rem;
-    margin-bottom: 25px;
-}
-
-.social-grid {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-bottom: 30px;
-}
-
-.social-item {
-    color: #9ca3af;
-    text-decoration: none;
-    font-weight: 600;
-    padding: 8px 18px;
-    border: 1px solid #374151;
-    border-radius: 20px;
-    transition: var(--transition-smooth);
-}
-
-.social-item:hover {
-    color: white;
-    border-color: var(--primary-color);
-    background-color: var(--primary-color);
-}
-
-.copyright {
-    font-size: 0.85rem;
-    color: #6b7280;
 }
 
 /* ================= FEATURED BLOGS CAROUSEL ================= */
 .blogs-section {
     padding: 80px 20px;
-    background-color: #f8fafc; /* Màu nền nhẹ phân tách với các section khác */
+    background-color: var(--secondary-bg);
     text-align: center;
 }
 
 .blogs-section h2 {
     font-size: 2rem;
     margin-bottom: 40px;
-    color: #1e293b;
+    color: var(--text-color);
 }
 
 .carousel-container {
@@ -409,20 +430,22 @@ h2::after {
 }
 
 .carousel-track-wrapper {
-    overflow: hidden; /* Ẩn các card nằm ngoài khung hiển thị */
+    overflow: hidden;
     width: 100%;
     border-radius: 16px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-    background: #ffffff;
+    box-shadow: var(--card-shadow);
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    transition: var(--transition-smooth);
 }
 
 .carousel-track {
     display: flex;
-    transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1); /* Hiệu ứng lướt mượt */
+    transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .blog-card {
-    min-width: 100%; /* Mỗi card chiếm trọn 1 slide rộng 100% */
+    min-width: 100%;
     box-sizing: border-box;
     padding: 40px 60px;
     text-align: left;
@@ -445,12 +468,12 @@ h2::after {
 .blog-card-content h3 {
     font-size: 1.6rem;
     margin-bottom: 15px;
-    color: #0f172a;
+    color: var(--text-color);
     line-height: 1.4;
 }
 
 .blog-card-content p {
-    color: #64748b;
+    color: var(--text-light);
     line-height: 1.7;
     margin-bottom: 25px;
 }
@@ -466,11 +489,10 @@ h2::after {
     color: #0056a3;
 }
 
-/* Nút bấm chuyển đổi */
 .carousel-btn {
-    background: #ffffff;
-    color: #334155;
-    border: 1px solid #e2e8f0;
+    background: var(--card-bg);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
     font-size: 1.8rem;
     width: 45px;
     height: 45px;
@@ -519,12 +541,12 @@ h2::after {
 /* ================= CONTACT SECTION ================= */
 .contact-section {
     padding: 80px 20px;
-    background-color: #ffffff;
+    background-color: var(--card-bg);
     text-align: center;
 }
 
 .contact-subtitle {
-    color: #64748b;
+    color: var(--text-light);
     margin-bottom: 40px;
 }
 
@@ -547,11 +569,13 @@ h2::after {
 .form-group textarea {
     width: 100%;
     padding: 14px;
-    border: 1px solid #cbd5e1;
+    border: 1px solid var(--border-input);
+    background-color: var(--light-bg);
+    color: var(--text-color);
     border-radius: 8px;
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 1rem;
-    transition: border-color 0.2s;
+    transition: border-color 0.2s, background-color 0.3s;
     box-sizing: border-box;
 }
 
@@ -577,24 +601,24 @@ h2::after {
     background: #0056a3;
 }
 
-/* Phần info bên cạnh */
 .contact-info {
     flex: 1;
-    background: #f8fafc;
+    background: var(--secondary-bg);
     padding: 30px;
     border-radius: 12px;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    transition: background-color 0.3s ease;
 }
 
 .contact-info h3 {
     margin-top: 0;
-    color: #1e293b;
+    color: var(--text-color);
 }
 
 .contact-info p {
-    color: #64748b;
+    color: var(--text-light);
     font-size: 0.95rem;
     line-height: 1.6;
 }
@@ -602,23 +626,25 @@ h2::after {
 .email-box {
     display: flex;
     align-items: center;
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
     padding: 10px 15px;
     border-radius: 8px;
     justify-content: space-between;
     margin-top: 15px;
+    transition: background-color 0.3s;
 }
 
 #email-address {
     font-weight: 600;
-    color: #334155;
+    color: var(--text-color);
     font-size: 0.9rem;
 }
 
 .btn-copy {
-    background: #e2e8f0;
-    border: none;
+    background: var(--light-bg);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
     padding: 6px 12px;
     border-radius: 6px;
     cursor: pointer;
@@ -628,7 +654,7 @@ h2::after {
 }
 
 .btn-copy:hover {
-    background: #cbd5e1;
+    background: var(--secondary-bg);
 }
 
 .copy-status {
@@ -638,172 +664,59 @@ h2::after {
     height: 15px;
 }
 
-/* ================= CONTACT SECTION ================= */
-.contact-section {
-    padding: 80px 20px;
-    background-color: #ffffff;
+/* FOOTER */
+.link {
+    background-color: #0f172a; /* Deep Slate giữ cố định để chân trang vững chãi */
+    color: #f3f4f6;
+    padding: 50px 10%;
     text-align: center;
 }
 
-.contact-subtitle {
-    color: #64748b;
-    margin-bottom: 40px;
+.link h3 {
+    font-size: 1.5rem;
+    margin-bottom: 25px;
 }
 
-.contact-container {
+.social-grid {
     display: flex;
-    max-width: 900px;
-    margin: 0 auto;
-    gap: 50px;
-    text-align: left;
-}
-
-.contact-form {
-    flex: 1.5;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.form-group input, 
-.form-group textarea {
-    width: 100%;
-    padding: 14px;
-    border: 1px solid #cbd5e1;
-    border-radius: 8px;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 1rem;
-    transition: border-color 0.2s;
-    box-sizing: border-box;
-}
-
-.form-group input:focus, 
-.form-group textarea:focus {
-    outline: none;
-    border-color: #0076df;
-}
-
-.btn-submit {
-    background: #0076df;
-    color: white;
-    border: none;
-    padding: 14px;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
-.btn-submit:hover {
-    background: #0056a3;
-}
-
-/* Phần info bên cạnh */
-.contact-info {
-    flex: 1;
-    background: #f8fafc;
-    padding: 30px;
-    border-radius: 12px;
-    display: flex;
-    flex-direction: column;
     justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 30px;
 }
 
-.contact-info h3 {
-    margin-top: 0;
-    color: #1e293b;
-}
-
-.contact-info p {
-    color: #64748b;
-    font-size: 0.95rem;
-    line-height: 1.6;
-}
-
-.email-box {
-    display: flex;
-    align-items: center;
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    padding: 10px 15px;
-    border-radius: 8px;
-    justify-content: space-between;
-    margin-top: 15px;
-}
-
-#email-address {
+.social-item {
+    color: #9ca3af;
+    text-decoration: none;
     font-weight: 600;
-    color: #334155;
-    font-size: 0.9rem;
+    padding: 8px 18px;
+    border: 1px solid #374151;
+    border-radius: 20px;
+    transition: var(--transition-smooth);
 }
 
-.btn-copy {
-    background: #e2e8f0;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
+.social-item:hover {
+    color: white;
+    border-color: var(--primary-color);
+    background-color: var(--primary-color);
+}
+
+.copyright {
     font-size: 0.85rem;
-    transition: all 0.2s;
+    color: #6b7280;
 }
 
-.btn-copy:hover {
-    background: #cbd5e1;
-}
-
-.copy-status {
-    font-size: 0.85rem;
-    color: #10b981;
-    margin-top: 8px;
-    height: 15px;
-}
-
-/* RESPONSIVE DESIGN */
-@media (max-width: 768px) {
-    .navbar { padding: 15px 5%; }
-    .nav-links { display: none; } 
-    section { padding: 50px 5%; }
-    .Welcome h1 { font-size: 2.5rem; }
-    .About-me { flex-direction: column-reverse; text-align: center; }
-    .Describe-me h2 { text-align: center; }
-    .Describe-me h2::after { margin: 10px auto; }
-    .About-me img { width: 200px; height: 200px; }
-    
-    .achievements-grid { grid-template-columns: 1fr; }
-        .blog-card {
-        padding: 30px 20px;
-    }
-    .carousel-btn {
-        width: 35px;
-        height: 35px;
-        font-size: 1.4rem;
-    }
-    .prev-btn { left: -15px; }
-    .next-btn { right: -15px; }
-
-    .contact-container {
-    flex-direction: column;
-    gap: 30px;
-    }
-
-    .contact-container {
-        flex-direction: column;
-        gap: 30px;
-    }
-}
-
-/* Container tổng */
+/* ==========================================
+   🤖 AI CHATBOT SYSTEM STYLE
+   ========================================== */
 #ai-chatbot-container {
     position: fixed;
     bottom: 20px;
     right: 20px;
     z-index: 1000;
-    font-family: Arial, sans-serif;
+    font-family: inherit;
 }
 
-/* Nút bong bóng chat */
 #chatbot-toggle-btn {
     background-color: #10b981;
     color: white;
@@ -816,17 +729,17 @@ h2::after {
     align-items: center;
     gap: 8px;
     font-weight: bold;
-    transition: transform 0.2s;
+    transition: transform 0.2s, background-color 0.2s;
 }
 #chatbot-toggle-btn:hover { transform: scale(1.05); }
 
-/* Cửa sổ chat */
 #chatbot-window {
     width: 350px;
     height: 450px;
-    background-color: #ffffff;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
     border-radius: 16px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    box-shadow: var(--card-shadow);
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -839,7 +752,6 @@ h2::after {
     display: none;
 }
 
-/* Header */
 .chatbot-header {
     background-color: #1f2937;
     color: white;
@@ -854,7 +766,6 @@ h2::after {
 .status-online { font-size: 11px; color: #10b981; }
 #chatbot-close-btn { background: none; border: none; color: white; font-size: 22px; cursor: pointer; }
 
-/* Vùng hiển thị tin nhắn */
 #chatbot-messages {
     flex: 1;
     padding: 15px;
@@ -862,7 +773,8 @@ h2::after {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    background-color: #f3f4f6;
+    background-color: var(--chat-bg);
+    transition: background-color 0.3s ease;
 }
 .message {
     padding: 10px 14px;
@@ -872,23 +784,32 @@ h2::after {
     line-height: 1.4;
     word-break: break-word;
 }
-.bot-msg { background-color: #ffffff; color: #1f2937; align-self: flex-start; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+.bot-msg { 
+    background-color: var(--chat-bot-msg); 
+    color: var(--chat-bot-text); 
+    align-self: flex-start; 
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05); 
+    transition: background-color 0.3s, color 0.3s;
+}
 .user-msg { background-color: #10b981; color: white; align-self: flex-end; }
-.loading-msg { color: #6b7280; font-style: italic; align-self: flex-start; background: none; box-shadow: none; padding: 0; }
+.loading-msg { color: var(--text-light); font-style: italic; align-self: flex-start; background: none; box-shadow: none; padding: 0; }
 
-/* Vùng nhập liệu */
 .chatbot-input-area {
     display: flex;
     padding: 10px;
-    background-color: #ffffff;
-    border-top: 1px solid #e5e7eb;
+    background-color: var(--card-bg);
+    border-top: 1px solid var(--border-color);
+    transition: background-color 0.3s, border-color 0.3s;
 }
 #chatbot-input {
     flex: 1;
-    border: 1px solid #d1d5db;
+    border: 1px solid var(--border-input);
+    background-color: var(--light-bg);
+    color: var(--text-color);
     padding: 8px 12px;
     border-radius: 20px;
     outline: none;
+    transition: all 0.3s;
 }
 #chatbot-send-btn {
     background: none;
@@ -897,4 +818,29 @@ h2::after {
     font-weight: bold;
     padding: 0 10px;
     cursor: pointer;
+}
+
+/* ==========================================
+   📱 RESPONSIVE DESIGN
+   ========================================== */
+@media (max-width: 768px) {
+    .navbar { padding: 15px 5%; }
+    .nav-links { display: none; } 
+    section { padding: 50px 5%; }
+    .Welcome h1 { font-size: 2.5rem; }
+    .About-me { flex-direction: column-reverse; text-align: center; }
+    .Describe-me h2 { text-align: center; }
+    .Describe-me h2::after { margin: 10px auto; }
+    .About-me img { width: 200px; height: 200px; }
+    
+    .achievements-grid { grid-template-columns: 1fr; }
+    .blog-card { padding: 30px 20px; }
+    .carousel-btn { width: 35px; height: 35px; font-size: 1.4rem; }
+    .prev-btn { left: -15px; }
+    .next-btn { right: -15px; }
+
+    .contact-container {
+        flex-direction: column;
+        gap: 30px;
+    }
 }

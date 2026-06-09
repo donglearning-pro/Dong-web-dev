@@ -23,6 +23,53 @@
             .highlight-quote { font-size: 1.25rem; font-weight: 600; color: var(--accent-primary); border-left: 4px solid var(--accent-primary); padding-left: 20px; margin: 30px 0; font-style: italic; line-height: 1.6; }
             .teaser-box { background: rgba(16, 185, 129, 0.05); border: 1px dashed var(--color-life); border-radius: 12px; padding: 24px; margin-top: 40px; }
             .teaser-box h4 { color: var(--color-life); font-size: 1.2rem; font-weight: 700; margin-bottom: 10px; }
+
+            /* ==========================================
+               🌙 BỔ SUNG CSS CỨU CÁNH CHO DARK MODE
+               ========================================== */
+            
+            /* Đổi màu chữ tiêu đề thành trắng/xám sáng */
+            body.dark-mode .article-header h1,
+            body.dark-mode .article-content h2 {
+                color: #f3f4f6; 
+            }
+
+            /* Đổi màu viền gạch chân của thẻ h2 */
+            body.dark-mode .article-content h2 {
+                border-bottom: 2px solid #374151;
+            }
+
+            /* H3 cần màu xanh dương sáng hơn để nổi trên nền tối */
+            body.dark-mode .article-content h3 {
+                color: #38bdf8; 
+            }
+
+            /* Đổi màu chữ đoạn văn bản bình thường */
+            body.dark-mode .article-content p, 
+            body.dark-mode .article-content li {
+                color: #d1d5db; 
+            }
+
+            /* Chỉnh lại nền và viền cho khung chứa ảnh/video */
+            body.dark-mode .media-block {
+                background: #1f2937;
+                border: 1px solid #374151;
+            }
+
+            body.dark-mode .media-caption {
+                color: #9ca3af;
+                border-top: 1px solid #374151;
+            }
+
+            /* Chỉnh lại khung Teaser Box (Bật mí dự án) */
+            body.dark-mode .teaser-box {
+                background: rgba(56, 189, 248, 0.05);
+                border: 1px dashed #38bdf8;
+            }
+            
+            body.dark-mode .teaser-box h4 {
+                color: #38bdf8;
+            }
         </style>
     </head>
     <body>
@@ -32,6 +79,7 @@
                 <div class="blog-logo">
                     <a href="../index.html">Dong<span>.Blog</span></a>
                 </div>
+                <button id="theme-toggle-btn" class="theme-btn">🌙</button>
                 <nav class="blog-nav-links">
                     <a href="index.html">← Back to Blog</a>
                 </nav>

@@ -274,3 +274,36 @@ if (chatbotSendBtn && chatbotInput) {
         if (e.key === 'Enter') handleChatSubmit();
     });
 }
+
+// ==========================================
+// ☀️ THEME TOGGLE (LIGHT / DARK MODE)
+// ==========================================
+
+const themeToggleBtn = document.getElementById('theme-toggle-btn');
+const currentTheme = localStorage.getItem('theme');
+
+// 1. Kiểm tra xem lần trước người dùng có chọn Dark Mode không
+if (currentTheme === 'dark') {
+    document.body.classList.add('dark-mode');
+    if (themeToggleBtn) themeToggleBtn.innerText = '☀️'; // Đổi icon sang mặt trời nếu là chế độ tối
+}
+
+// 2. Lắng nghe sự kiện click vào nút đổi giao diện
+if (themeToggleBtn) {
+    themeToggleBtn.addEventListener('click', () => {
+        // Toggle class "dark-mode" ở thẻ <body>
+        document.body.classList.toggle('dark-mode');
+        
+        let theme = 'light';
+        // Nếu body đang có class dark-mode
+        if (document.body.classList.contains('dark-mode')) {
+            theme = 'dark';
+            themeToggleBtn.innerText = '☀️'; // Gợi ý bấm để chuyển sang Sáng
+        } else {
+            themeToggleBtn.innerText = '🌙'; // Gợi ý bấm để chuyển sang Tối
+        }
+        
+        // Lưu lựa chọn vào localStorage để lần sau vào web không bị mất
+        localStorage.setItem('theme', theme);
+    });
+}

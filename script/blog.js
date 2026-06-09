@@ -1,45 +1,96 @@
-// Hàm hỗ trợ kiểm tra độ dài dữ liệu (Đặt bên ngoài)
+// ==========================================
+// 🛠️ HÀM HỖ TRỢ TOÀN CỤC (GLOBAL FUNCTIONS)
+// ==========================================
+
+// Hàm hỗ trợ kiểm tra độ dài dữ liệu
 function validateInputLength(str, min, max) {
     return str.length >= min && str.length <= max;
 }
 
-// Xử lý sự kiện click sao chép Email
+// Xử lý sự kiện click sao chép link bài viết
 function copyArticleLink() {
-                const currentUrl = window.location.href;
-                navigator.clipboard.writeText(currentUrl).then(() => {
-                    const btn = document.getElementById('copyLinkBtn');
-                    const btnText = document.getElementById('btnText');
-                    
-                    // Thêm class biến đổi style và đổi text
-                    btn.classList.add('copied');
-                    btnText.innerText = 'Copied to Clipboard!';
-                    
-                    // Sau 2 giây quay về trạng thái cũ
-                    setTimeout(() => {
-                        btn.classList.remove('copied');
-                        btnText.innerText = 'Copy Article Link';
-                    }, 2000);
-                }).catch(err => {
-                    console.error('Không thể copy link: ', err);
-                });
-            }
+    const currentUrl = window.location.href;
+    navigator.clipboard.writeText(currentUrl).then(() => {
+        const btn = document.getElementById('copyLinkBtn');
+        const btnText = document.getElementById('btnText');
+        
+        if (!btn || !btnText) return;
 
-// --- XỬ LÝ HỆ THỐNG BÌNH LUẬN LOCALSTORAGE TỰ ĐỘNG ---
+        // Thêm class biến đổi style và đổi text
+        btn.classList.add('copied');
+        btnText.innerText = 'Copied to Clipboard!';
+        
+        // Sau 2 giây quay về trạng thái cũ
+        setTimeout(() => {
+            btn.classList.remove('copied');
+            btnText.innerText = 'Copy Article Link';
+        }, 2000);
+    }).catch(err => {
+        console.error('Không thể copy link: ', err);
+    });
+}
+
+// Hàm chống mã độc XSS bảo vệ an toàn cho bình luận
+function escapeHTML(str) {
+    return str.replace(/[&<>'"]/g, 
+        tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+    );
+}
+
+// ==========================================
+// 🚀 KHỞI CHẠY KHI GIAO DIỆN (DOM) ĐÃ SẴN SÀNG
+// ==========================================
 document.addEventListener("DOMContentLoaded", function () {
+    
+    /* --------------------------------------
+       ☀️ PHẦN 1: THEME TOGGLE (LIGHT / DARK MODE)
+       -------------------------------------- */
+    const themeToggleBtn = document.getElementById('theme-toggle-btn');
+    const currentTheme = localStorage.getItem('theme');
+
+    // Kiểm tra và áp dụng theme đã lưu từ lần trước
+    if (currentTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        if (themeToggleBtn) themeToggleBtn.innerText = '☀️';
+    } else {
+        if (themeToggleBtn) themeToggleBtn.innerText = '🌙';
+    }
+
+    // Lắng nghe sự kiện click đổi giao diện
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            
+            let theme = 'light';
+            if (document.body.classList.contains('dark-mode')) {
+                theme = 'dark';
+                themeToggleBtn.innerText = '☀️'; 
+            } else {
+                themeToggleBtn.innerText = '🌙'; 
+            }
+            
+            // Lưu trạng thái vào localStorage
+            localStorage.setItem('theme', theme);
+        });
+    }
+
+    /* --------------------------------------
+       💬 PHẦN 2: HỆ THỐNG BÌNH LUẬN LOCALSTORAGE
+       -------------------------------------- */
     const commentForm = document.getElementById("commentForm");
     
-    // Nếu trang hiện tại không có form comment (trang chủ chẳng hạn) thì dừng script
+    // Nếu trang hiện tại không có form comment (ví dụ: trang chủ) thì không chạy đoạn dưới
     if (!commentForm) return;
 
-    // Lấy ID duy nhất của bài viết dựa vào tên file HTML trên URL để tránh lẫn lộn comment giữa các bài
     const blogId = window.location.pathname.split("/").pop() || "default-blog";
-    
     const commentsList = document.getElementById("commentsList");
     const commentCount = document.getElementById("commentCount");
 
     // Hàm load và hiển thị bình luận
     function loadComments() {
         let comments = JSON.parse(localStorage.getItem(`comments_${blogId}`)) || [];
+        if (!commentsList || !commentCount) return;
+
         commentsList.innerHTML = "";
         commentCount.innerText = comments.length;
 
@@ -63,7 +114,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Xử lý sự kiện gửi form
+    // Xử lý gửi bình luận
     commentForm.addEventListener("submit", function (e) {
         e.preventDefault();
 
@@ -77,37 +128,34 @@ document.addEventListener("DOMContentLoaded", function () {
         const content = contentInput.value.trim();
         const dateStr = new Date().toLocaleString("vi-VN", { hour: '2-digit', minute:'2-digit', day: '2-digit', month: '2-digit', year: 'numeric' });
 
-        // === KIỂM TRA ĐỘ DÀI DỮ LIỆU TRƯỚC TIÊN ===
+        // Kiểm tra độ dài
         if (!validateInputLength(content, 10, 5000)) {
-            alert("Lời nhắn quá ngắn (dưới 10 ký tự) hoặc quá dài (trên 5000 ký tự)! Vui lòng bổ sung thêm thông tin.");
-            return; // Dừng lại tại đây khi nút gửi CHƯA bị khóa
+            alert("Lời nhắn quá ngắn (dưới 10 ký tự) hoặc quá dài (trên 5000 ký tự)!");
+            return; 
         }
 
-        // === 1. LẤY VÀ KIỂM TRA TOKEN HCAPTCHA ===
+        // Kiểm tra mã xác thực hCaptcha
         const hCaptchaInput = commentForm.querySelector('[name="h-captcha-response"]');
         const hCaptchaToken = hCaptchaInput ? hCaptchaInput.value : "";
 
         if (!hCaptchaToken) {
             alert("Vui lòng tích chọn ô xác thực 'Tôi không phải là robot' trước khi gửi!");
-            return; // Dừng lại không cho lưu hay gửi email nếu chưa giải captcha
+            return; 
         }
 
-        // === 2. VẪN LƯU VÀO LOCALSTORAGE ĐỂ HIỂN THỊ TRÊN WEB ===
+        // Lưu vào LocalStorage
         const newComment = { name, email, content, date: dateStr };
         let comments = JSON.parse(localStorage.getItem(`comments_${blogId}`)) || [];
         comments.push(newComment);
         localStorage.setItem(`comments_${blogId}`, JSON.stringify(comments));
 
-        // === 3. 🚀 BẮN EMAIL VỀ WEB3FORMS KÈM TOKEN BẢO MẬT ===
+        // Bắn email thông báo qua Web3Forms
         if (apiKeyInput && apiKeyInput.value.trim() !== "") {
             const formData = new FormData();
             formData.append("access_key", apiKeyInput.value);
             formData.append("from_name", "Dong's Blog Notifier");
             formData.append("subject", `💬 Bình luận mới từ bài viết: ${blogId}`);
-            
-            // ĐƯA TOKEN HCAPTCHA VÀO ĐÂY ĐỂ ĐƯỢC WEB3FORMS CHẤP NHẬN
             formData.append("h-captcha-response", hCaptchaToken);
-
             formData.append("Nguoi_Gui", `${name} (${email || 'Không để lại email'})`);
             formData.append("Noi_Dung_Cam_Nhan", content);
             formData.append("Thoi_Gian", dateStr);
@@ -127,10 +175,8 @@ document.addEventListener("DOMContentLoaded", function () {
             .catch(error => console.error("Lỗi kết nối mạng:", error));
         }
 
-        // === 4. RESET FORM & LÀM MỚI HCAPTCHA ===
+        // Reset form & hCaptcha
         commentForm.reset();
-        
-        // Đoạn này ép ô hCaptcha quay về trạng thái trống để người sau comment không bị dùng lại token cũ
         if (typeof hcaptcha !== 'undefined') {
             hcaptcha.reset(); 
         }
@@ -138,18 +184,11 @@ document.addEventListener("DOMContentLoaded", function () {
         loadComments();
     });
 
-    // Hàm chống mã độc XSS bảo vệ an toàn cho trang web
-    function escapeHTML(str) {
-        return str.replace(/[&<>'"]/g, 
-            tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
-        );
-    }
-
-    // Chạy tải bình luận ngay khi vào trang
+    // Tự động tải bình luận khi vào trang bài viết
     loadComments();
 });
 
-// Chống Clickjacking
+// Chống tấn công Clickjacking (Bảo mật nâng cao)
 if (window.self !== window.top) {
-    window.top.location = window.self.location; // Ép trình duyệt thoát khỏi iframe giả mạo
+    window.top.location = window.self.location;
 }
