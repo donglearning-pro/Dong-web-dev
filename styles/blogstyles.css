@@ -79,6 +79,27 @@ body {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* ==========================================
+    🚀 CSS CHO THANH TIẾN TRÌNH ĐỌC BLOG
+    ========================================== */
+.progress-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px; /* Độ dày của thanh, bạn có thể chỉnh to/nhỏ tùy ý */
+    background: transparent;
+    z-index: 9999; /* Đảm bảo thanh luôn nằm trên cùng, không bị che khuất */
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(to right, #0ea5e9, #6366f1, #a855f7); /*Cyberpunk (Xanh dương sang Tím mộng mơ) */
+    width: 0%; /* Khởi tạo chiều rộng bằng 0 */
+    transition: width 0.1s ease-out; /* Giúp thanh chạy mượt mà hơn */
+    border-radius: 0 2px 2px 0;
+}
+
 /* NAVBAR */
 .blog-navbar {
     background-color: var(--navbar-bg);

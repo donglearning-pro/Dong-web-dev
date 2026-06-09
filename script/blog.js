@@ -7,6 +7,21 @@ function validateInputLength(str, min, max) {
     return str.length >= min && str.length <= max;
 }
 
+// Bắt sự kiện cuộn trang
+window.addEventListener('scroll', function() {
+    // Lấy vị trí đang cuộn hiện tại
+    let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    
+    // Lấy tổng chiều cao của trang trừ đi chiều cao của màn hình hiển thị
+    let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    
+    // Tính toán tỷ lệ phần trăm
+    let scrolled = (winScroll / height) * 100;
+    
+    // Cập nhật độ rộng (width) cho thanh tiến trình
+    document.getElementById("readingProgressBar").style.width = scrolled + "%";
+});
+
 // Xử lý sự kiện click sao chép link bài viết
 function copyArticleLink() {
     const currentUrl = window.location.href;
