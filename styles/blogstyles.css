@@ -597,6 +597,88 @@ pre::-webkit-scrollbar-thumb:hover {
     background-color: var(--color-life) !important;
 }
 
+/* ==========================================
+    🎧 CSS CHO FLOATING AUDIO PLAYER
+    ========================================== */
+.floating-player {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #ffffff;
+    padding: 12px 16px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e5e7eb;
+    z-index: 9998;
+    transition: all 0.3s ease;
+}
+
+.player-title {
+    margin: 0 0 8px 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #374151;
+    text-align: center;
+}
+
+/* ==========================================
+    ✨ CSS HIỆU ỨNG CHỮ CHẠY (MARQUEE)
+    ========================================== */
+    
+/* Khung giới hạn hiển thị chữ */
+.track-info-container {
+    width: 220px; /* Bằng đúng chiều rộng của thanh audio */
+    overflow: hidden; /* Cắt đi phần chữ tràn ra ngoài */
+    white-space: nowrap; /* Ép chữ nằm trên 1 dòng */
+    margin-bottom: 8px;
+}
+
+/* Khối chứa chữ sẽ chuyển động */
+.track-info-scroller {
+    display: inline-block;
+    /* Thời gian chạy 10s, bạn có thể chỉnh số này to lên để chạy chậm lại */
+    animation: scrollText 10s linear infinite; 
+}
+
+/* Định dạng font chữ */
+.track-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #374151;
+    font-family: sans-serif;
+    display: inline-block;
+    padding-right: 50px; /* Tạo khoảng trống giữa 2 lần lặp chữ */
+}
+
+/* Hỗ trợ hiển thị trong Dark Mode */
+body.dark-mode .track-name {
+    color: #e5e7eb;
+}
+
+/* Trục chuyển động của chữ (Dịch chuyển sang trái 50%) */
+@keyframes scrollText {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); } 
+}
+
+/* Chỉnh lại Audio tag cho gọn */
+.floating-player audio {
+    height: 35px;
+    width: 220px;
+    outline: none;
+}
+
+/* Tối ưu cho Dark Mode */
+body.dark-mode .floating-player {
+    background: #1f2937;
+    border-color: #374151;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-mode .player-title {
+    color: #e5e7eb;
+}
+
 /* FOOTER */
 .blog-footer {
     text-align: center;
@@ -617,5 +699,35 @@ pre::-webkit-scrollbar-thumb:hover {
     }
     .featured-content {
         padding: 24px;
+    }
+    /* Ép khung ôm sát góc hơn và giảm độ dày (padding) */
+    .floating-player {
+        bottom: 10px;
+        right: 10px;
+        padding: 8px 10px;
+        border-radius: 12px;
+    }
+
+    /* Thu nhỏ chữ tiêu đề */
+    .player-title {
+        font-size: 0.75rem;
+        margin-bottom: 4px;
+    }
+
+    /* Thu hẹp khu vực chữ chạy và thanh audio */
+    .track-info-container, 
+    .floating-player audio {
+        width: 160px; /* Nhỏ hơn so với 220px trên PC */
+    }
+
+    /* Làm thanh audio mỏng lại một chút */
+    .floating-player audio {
+        height: 30px; 
+    }
+
+    /* Thu nhỏ font chữ của tên bài hát */
+    .track-name {
+        font-size: 0.75rem;
+        padding-right: 30px; /* Thu hẹp khoảng cách lặp chữ */
     }
 }
