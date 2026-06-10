@@ -339,6 +339,7 @@ h2::after {
 .project-ggl { background-image: url("/assets/index-materials/google.webp"); background-size: cover; background-position: center; }
 .project-space { background-image: url("/assets/index-materials/nasa.webp"); background-size: cover; background-position: center; }
 .project-passenger-counter { background-image: url("/assets/index-materials/passenger-counter.webp"); background-size: cover; background-position: center; }
+.project-music-app {background-image: url("/assets/index-materials/music-app.webp"); background-size: cover; background-position: center;}
 
 /* ACHIEVEMENTS GRID */
 .achievements-section {
