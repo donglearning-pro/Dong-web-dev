@@ -166,13 +166,21 @@ body.music-app-body, h1, h2, h3, h4 {
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
 }
 
-/* 🕹️ THANH PLAYER BOTTOM LỘT XÁC (PREMIUM STYLE) */
+/* ========================================================
+   🕹️ THANH PLAYER BOTTOM GỌN GÀNG (ĐÃ BỎ TEXT GIỮA)
+======================================================== */
+.app-container {
+    display: flex;
+    flex: 1;
+    height: calc(100vh - 90px); /* Hạ xuống 90px cân bằng với player mới */
+}
+
 .app-bottom-player {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    height: 110px;
+    height: 90px; /* Thu gọn từ 110px xuống 90px cho tinh tế */
     background: rgba(11, 17, 32, 0.85);
     backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(25px);
@@ -185,185 +193,274 @@ body.music-app-body, h1, h2, h3, h4 {
     box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.5);
 }
 
-/* Khối thông tin bài hát */
+/* 1. Khối thông tin bài hát (Bên trái) - Đã dọn trùng lặp */
 .current-track-info {
     display: flex;
     align-items: center;
     gap: 16px;
-    width: 28%;
+    width: 30%;
 }
 .current-track-info img {
-    width: 60px;
-    height: 60px;
-    border-radius: 10px;
+    width: 56px;
+    height: 56px;
+    border-radius: 8px;
     object-fit: cover;
     box-shadow: 0 4px 12px rgba(0,0,0,0.4);
     border: 1px solid rgba(255,255,255,0.1);
 }
-.current-track-info h4 { 
-    margin: 0 0 4px 0; 
-    font-size: 15px; 
-    font-weight: 700;
-    color: #ffffff;
-}
-.current-track-info p { 
-    margin: 0; 
-    color: var(--text-muted); 
-    font-size: 13px; 
-}
+.current-track-info h4 { margin: 0 0 4px 0; font-size: 15px; font-weight: 700; color: #ffffff; }
+.current-track-info p { margin: 0; color: var(--text-muted); font-size: 13px; }
 
-/* Khối chữ trải lòng ở giữa */
-.player-story-box {
-    width: 40%;
-    text-align: center;
-    max-height: 80px;
-    overflow-y: auto;
-    padding: 0 20px;
-}
-.player-story-box blockquote {
-    margin: 0;
-    font-style: italic;
-    font-size: 13.5px;
-    color: #94a3b8;
-    line-height: 1.6;
-    border: none;
-}
-
-/* Khối điều khiển nhạc bên phải */
+/* 2. Khối điều khiển nhạc (Căn giữa hoàn hảo) */
 .player-controls-wrapper {
-    width: 32%;
+    width: 40%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 12px;
+    gap: 8px;
+}
+.control-buttons { display: flex; align-items: center; gap: 20px; }
+.playback-bar { width: 100%; display: flex; align-items: center; gap: 12px; font-size: 12px; color: #64748b; }
+
+/* 3. Tận dụng khối góc phải làm nơi chứa nút tiện ích */
+.player-controls {
+    width: 30%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 15px;
 }
 
-/* Các nút bấm Play/Pause/Next */
-.control-buttons {
+/* =========================================
+   SỬA LỖI NÚT STORY & LÀM ĐẸP THANH CUỘN 
+========================================= */
+
+/* Nút ở góc phải (Desktop): Mặc định hiện */
+.player-controls .story-toggle-btn {
     display: flex;
-    align-items: center;
-    gap: 20px;
-}
-.control-icon-btn {
     background: none;
     border: none;
     color: #94a3b8;
-    font-size: 18px;
+    font-size: 20px;
     cursor: pointer;
     transition: all 0.2s ease;
 }
-.control-icon-btn:hover {
-    color: #ffffff;
+
+/* Nút ở giữa (Mobile): Mặc định ẩn trên Desktop */
+.control-buttons .story-toggle-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: #94a3b8;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* Hover chung cho cả 2 nút */
+.story-toggle-btn:hover {
+    color: var(--accent-glow);
     transform: scale(1.1);
 }
-.play-main {
-    background: #ffffff;
-    color: #090d16;
-    width: 40px;
-    height: 40px;
+
+/* Khi xuống màn hình nhỏ (Mobile) */
+@media (max-width: 900px) {
+    .control-buttons .story-toggle-btn {
+        display: flex; /* Hiện nút ở giữa */
+    }
+    .player-controls .story-toggle-btn {
+        display: none; /* Ẩn nút ở góc phải */
+    }
+}
+
+/* Tùy chỉnh thanh cuộn (Scrollbar) cho toàn bộ trang */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.05); /* Tàng hình mờ mờ */
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(16, 185, 129, 0.5); /* Sáng màu xanh khi di chuột vào */
+}
+/* Xóa viền vuông, bo tròn và đổi màu theo theme cho nút điều khiển */
+.control-icon-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-main);
+    font-size: 20px;
+    cursor: pointer;
+    padding: 8px;
     border-radius: 50%;
+    transition: all 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 16px;
-    padding-left: 4px; /* Cân bằng icon tam giác */
-    box-shadow: 0 4px 10px rgba(255,255,255,0.2);
-}
-.play-main:hover {
-    background: var(--accent-glow);
-    color: #ffffff;
-    transform: scale(1.05);
-    box-shadow: 0 0 15px rgba(16, 185, 129, 0.5);
 }
 
-/* Thanh thời gian chạy nhạc (Progress Bar) */
-.playback-bar {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-size: 12px;
-    color: #64748b;
+/* Hiệu ứng khi di chuột vào nút */
+.control-icon-btn:hover {
+    color: var(--accent-glow);
+    transform: scale(1.1);
 }
+
+/* Nhấn mạnh nút Play ở giữa */
+.play-main {
+    font-size: 28px;
+    color: var(--accent-glow); 
+    text-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+}
+
+/* Style cho thanh tiến trình chạy nhạc */
 .progress-container {
-    flex: 1;
-    height: 4px;
+    flex: 1; /* Ép thanh nhạc giãn hết cỡ lấp đầy khoảng trống giữa 2 mốc thời gian */
+    height: 6px;
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 2px;
+    border-radius: 10px;
     cursor: pointer;
     position: relative;
-    transition: height 0.2s;
+    overflow: hidden;
 }
-.progress-container:hover {
-    height: 6px;
-}
+
+/* Phần màu xanh lục bảo chạy theo nhạc */
 .progress-bar {
     height: 100%;
     width: 0%;
     background: var(--accent-glow);
-    border-radius: 2px;
-    position: absolute;
+    border-radius: 10px;
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.5); /* Hiệu ứng phát sáng nhẹ */
+    transition: width 0.1s linear;
+}
+
+/* ========================================================
+   🧭 BIẾN ĐỔI STORY PANEL: SIDEBAR ĐẸP ĐẼ TRÊN DESKTOP
+======================================================== */
+.story-slide-panel {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
     top: 0;
-    left: 0;
+    right: 0;
+    width: 400px; /* Chiều rộng lý tưởng cho Sidebar đọc chữ */
+    height: 100vh;
+    z-index: 1100; /* Nổi trên player bottom */
+    background: rgba(9, 13, 22, 0.96);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 35px 30px;
+    box-sizing: border-box;
+    transform: translateX(100%); /* Giấu sang bên phải */
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.6);
 }
 
-/* Nút chấm tròn nhỏ khi hover vào thanh nhạc */
-.progress-container:hover .progress-bar::after {
-    content: '';
-    position: absolute;
-    right: -4px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 10px;
-    height: 10px;
-    background: #ffffff;
-    border-radius: 50%;
-    box-shadow: 0 0 8px rgba(0,0,0,0.5);
+/* Khi kích hoạt mở panel */
+.story-slide-panel.visible {
+    transform: translateX(0);
+    bottom: auto; /* Reset thuộc tính của mobile */
 }
 
-.current-track-info {
+.story-panel-header {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 16px;
-    width: 25%;
-}
-.current-track-info img {
-    width: 64px;
-    height: 64px;
-    border-radius: 8px;
-    object-fit: cover;
-    border: 1px solid rgba(255,255,255,0.1);
-}
-.current-track-info h4 { margin: 0 0 4px 0; font-size: 15px; }
-.current-track-info p { margin: 0; color: var(--text-muted); font-size: 13px; }
-
-/* VÙNG HIỂN THỊ GÓC TRẢI LÒNG GIỮA TRÌNH PHÁT NHẠC */
-.player-story-box {
-    width: 45%;
-    text-align: center;
-    max-height: 90px;
-    overflow-y: auto;
-    padding: 0 15px;
-    transition: opacity 0.3s ease;
-}
-.player-story-box blockquote {
-    margin: 0;
-    font-style: italic;
+    margin-bottom: 24px;
     font-size: 13px;
+    font-weight: 700;
+    color: var(--accent-glow);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.story-close-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 24px;
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.2s;
+}
+.story-close-btn:hover { color: #fff; }
+
+/* Nội dung bài viết bên trong Sidebar được cuộn mượt mà */
+.story-slide-panel-body {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 5px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(16, 185, 129, 0.2) transparent;
+}
+.story-slide-panel-body::-webkit-scrollbar { width: 4px; }
+.story-slide-panel-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+.story-slide-panel-body::-webkit-scrollbar-thumb:hover { background: var(--accent-glow); }
+
+.story-slide-panel blockquote {
+    margin: 0;
+    font-style: normal; /* Chuyển sang font thường giúp đọc truyện dài không mỏi mắt */
+    font-size: 15.5px;   /* Chữ to rõ ràng như bạn mong muốn */
     color: #cbd5e1;
-    line-height: 1.5;
+    line-height: 1.8;   /* Giãn dòng chuẩn UI/UX sách điện tử */
+    text-align: justify; /* Căn đều hai bên cực kỳ thẩm mỹ */
+    border: none;
 }
 
-.player-controls {
-    width: 25%;
-    display: flex;
-    justify-content: flex-end;
-}
-.player-controls audio {
-    width: 100%;
-    max-width: 280px;
-}
+/* ========================================================
+   📱 RESPONSIVE MOBILE: QUAY VỀ GIAO DIỆN BOTTOM PANEL
+======================================================== */
+@media (max-width: 900px) {
+    /* Đè lại layout: Trên mobile biến thành Panel trượt từ dưới lên */
+    .story-slide-panel {
+        top: auto;
+        bottom: -100%;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: auto;
+        max-height: 65vh; /* Giới hạn chiều cao để không nuốt trọn màn hình */
+        transform: none;
+        border-left: none;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 20px 24px 28px;
+        transition: bottom 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .story-slide-panel.visible {
+        bottom: 180px; /* Bằng chiều cao player mobile */
+        transform: none;
+    }
+    .story-slide-panel blockquote {
+        text-align: center; /* Mobile căn giữa đọc sẽ tự nhiên hơn */
+        font-size: 14px;
+    }
 
+    .app-container {
+        flex-direction: column;
+        height: calc(100vh - 180px);
+    }
+
+    /* Giữ nguyên các cấu hình mobile player của bạn */
+    .app-bottom-player {
+        height: 180px;
+        padding: 12px 20px;
+        flex-direction: column;
+        justify-content: center;
+        align-items: stretch;
+        gap: 8px;
+    }
+    .current-track-info { width: 100%; gap: 12px; }
+    .current-track-info img { width: 44px; height: 44px; }
+    .player-controls-wrapper { width: 100%; align-items: center; gap: 8px; }
+    .control-buttons { justify-content: center; gap: 30px; }
+    .playback-bar { width: 100%; }
+    
+    /* Ẩn vùng controls phụ trên mobile để không phá layout */
+    .player-controls { display: none; }
+}
 /* ======================================================
    🔧 CÁC BỔ SUNG
 ====================================================== */
@@ -377,11 +474,6 @@ body.music-app-body, h1, h2, h3, h4 {
     width: 0 !important;
     margin: 0 !important;
     padding: 0 !important;
-}
-
-/* Nút story - mặc định ẩn trên desktop */
-.story-toggle-btn {
-    display: none !important;
 }
 
 /* Story Slide Panel - chỉ hiện trên mobile */
@@ -501,5 +593,46 @@ body.music-app-body, h1, h2, h3, h4 {
     /* Hàng 3: Thanh progress bar full width */
     .playback-bar {
         width: 100%;
+    }
+}
+/* ========================================================
+   CHUẨN HÓA VỊ TRÍ STORY PANEL (TRÁNH XUNG ĐỘT)
+======================================================== */
+/* 1. Desktop: Ép sát lề phải, trượt ngang */
+.story-slide-panel {
+    display: flex !important;
+    flex-direction: column;
+    position: fixed !important;
+    top: 0 !important;
+    bottom: auto !important;
+    right: 0 !important;
+    left: auto !important;
+    width: 400px !important;
+    height: 100vh !important;
+    transform: translateX(100%) !important; /* Giấu nhẹm sang bên phải */
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    z-index: 1100 !important;
+}
+
+/* Khi bấm mở trên Desktop */
+.story-slide-panel.visible {
+    transform: translateX(0) !important;
+}
+
+/* 2. Mobile: Nằm dưới đáy, trượt lên */
+@media (max-width: 900px) {
+    .story-slide-panel {
+        top: auto !important;
+        bottom: -100% !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+        max-height: 65vh !important;
+        transform: none !important;
+        transition: bottom 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+    .story-slide-panel.visible {
+        bottom: 180px !important; /* Trượt lên trần của thanh player */
     }
 }
