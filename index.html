@@ -282,7 +282,7 @@
             <p class="copyright">© 2026 DongDev. All rights reserved.</p>
         </footer>
 
-        <div id="ai-chatbot-container">
+<div id="ai-chatbot-container">
     <button id="chatbot-toggle-btn" aria-label="Chat với trợ lý DongDev">
         <span class="chat-icon">💬</span>
         <span class="chat-text">Hỏi về Đông?</span>
@@ -306,13 +306,15 @@
             </div>
         </div>
 
+        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback&render=explicit" async defer></script>
+        <div id="turnstile-widget" style="padding: 0 10px;"></div>
+        
         <div class="chatbot-input-area">
             <input type="text" id="chatbot-input" placeholder="Nhập tin nhắn..." autocomplete="off">
             <button id="chatbot-send-btn">Gửi</button>
         </div>
     </div>
 </div>
-
         <script src="/script/index.js"></script>
         <script src="https://web3forms.com/client/script.js" async defer></script>
     </body>

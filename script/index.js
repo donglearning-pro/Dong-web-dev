@@ -164,146 +164,216 @@ if (window.self !== window.top) {
 }
 
 // ==========================================
-// 🤖 CẤU HÌNH MINI AI CHATBOT (GEMINI API)
+// 🤖 CẤU HÌNH MINI AI CHATBOT (BẢN SỬA LỖI FINAL)
 // ==========================================
 
-const chatbotToggleBtn = document.getElementById('chatbot-toggle-btn');
-const chatbotWindow = document.getElementById('chatbot-window');
-const chatbotCloseBtn = document.getElementById('chatbot-close-btn');
-const chatbotMessages = document.getElementById('chatbot-messages');
-const chatbotInput = document.getElementById('chatbot-input');
-const chatbotSendBtn = document.getElementById('chatbot-send-btn');
+const NETLIFY_FUNCTION_URL = "/.netlify/functions/gemini";
+const MODEL_FALLBACK_CHAIN = ["gemini-2.5-flash-lite", "gemini-2.5-flash", "gemini-3.5-flash"];
 
-// Bật / Ẩn cửa sổ chat
-if (chatbotToggleBtn) {
-    chatbotToggleBtn.addEventListener('click', () => chatbotWindow.classList.toggle('hidden'));
-}
-if (chatbotCloseBtn) {
-    chatbotCloseBtn.addEventListener('click', () => chatbotWindow.classList.add('hidden'));
-}
+// 1. Khai báo các biến ở phạm vi TOÀN CỤC để mọi hàm đều gọi được
+let chatbotHistory = [];
+let chatbotMessages, chatbotInput, chatbotSendBtn;
 
-// Hàm thêm tin nhắn vào màn hình chat
+// 2. ÉP JS CHỜ HTML LOAD XONG MỚI CHẠY
+document.addEventListener('DOMContentLoaded', () => {
+    console.log("🧱 DOM đã tải xong! Bắt đầu khởi tạo Chatbot...");
+
+    const chatbotToggleBtn = document.getElementById('chatbot-toggle-btn');
+    const chatbotWindow = document.getElementById('chatbot-window');
+    const chatbotCloseBtn = document.getElementById('chatbot-close-btn');
+    
+    // Gán giá trị cho các biến toàn cục
+    chatbotMessages = document.getElementById('chatbot-messages');
+    chatbotInput = document.getElementById('chatbot-input');
+    chatbotSendBtn = document.getElementById('chatbot-send-btn');
+
+    if (!chatbotInput || !chatbotSendBtn || !chatbotMessages) {
+        console.error("❌ LỖI: Không tìm thấy phần tử Chatbot trong HTML!");
+        return;
+    }
+
+    // Bật / Ẩn cửa sổ chat
+    if (chatbotToggleBtn && chatbotWindow) {
+        chatbotToggleBtn.addEventListener('click', () => chatbotWindow.classList.toggle('hidden'));
+    }
+    if (chatbotCloseBtn && chatbotWindow) {
+        chatbotCloseBtn.addEventListener('click', () => chatbotWindow.classList.add('hidden'));
+    }
+
+    // Gắn sự kiện click và enter
+    chatbotSendBtn.addEventListener('click', handleChatSubmit);
+    chatbotInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') handleChatSubmit();
+    });
+
+    console.log("✅ Khởi tạo Chatbot thành công!");
+});
+
+// 3. Hàm in tin nhắn ra màn hình
 function appendMessage(text, sender) {
     const msgDiv = document.createElement('div');
     msgDiv.classList.add('message', sender === 'user' ? 'user-msg' : 'bot-msg');
     msgDiv.innerText = text;
-    chatbotMessages.appendChild(msgDiv);
-    chatbotMessages.scrollTop = chatbotMessages.scrollHeight; // Tự cuộn xuống cuối
+    
+    if (chatbotMessages) {
+        chatbotMessages.appendChild(msgDiv);
+        chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+    }
     return msgDiv;
 }
 
-// Hàm gọi API Gemini
-// script/index.js
-
-// URL nội bộ của Netlify tự động nhận diện khi deploy
-const NETLIFY_FUNCTION_URL = "/.netlify/functions/gemini";
-
-async function askGemini(userMessage) {
+// 4. Hàm gọi API Gemini
+async function askGemini() {
     const loadingDiv = document.createElement('div');
     loadingDiv.classList.add('message', 'loading-msg');
     loadingDiv.innerText = "Trợ lý đang gõ... ⏳";
     chatbotMessages.appendChild(loadingDiv);
     chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
 
+    // Lấy token Turnstile một cách an toàn
+    let turnstileToken = "";
     try {
-        // Gọi lên Serverless Function của bạn thay vì gọi trực tiếp Google
-        const response = await fetch(NETLIFY_FUNCTION_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ message: userMessage }) // Chỉ bắn tin nhắn lên, không kèm Key
-        });
+        turnstileToken = turnstile.getResponse(); 
+    } catch (e) {
+        console.warn("⚠️ Turnstile chưa sẵn sàng.");
+    }
 
-        const data = await response.json();
+    if (!turnstileToken) {
         loadingDiv.remove();
+        appendMessage("Vui lòng tích vào ô xác thực bảo mật trước khi chat nhé!", "bot");
+        chatbotHistory.pop(); // Xóa câu vừa hỏi lỗi khỏi bộ nhớ AI
+        return;
+    }
 
-        if (data.candidates && data.candidates[0].content.parts[0].text) {
-            let reply = data.candidates[0].content.parts[0].text;
-            appendMessage(reply, 'bot');
-        } else {
-            appendMessage("Huhu, hệ thống đang bận một chút, bạn thử lại sau giây lát nhé!", 'bot');
+    let finalReply = null;
+
+    for (const modelName of MODEL_FALLBACK_CHAIN) {
+        try {
+            console.log(`🤖 Đang thử kết nối: ${modelName}`);
+            
+            const response = await fetch(NETLIFY_FUNCTION_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ 
+                    contents: chatbotHistory,
+                    model: modelName,
+                    token: turnstileToken
+                }) 
+            });
+
+            if (!response.ok) continue;
+
+            const data = await response.json();
+            if (data.candidates && data.candidates[0].content.parts[0].text) {
+                finalReply = data.candidates[0].content.parts[0].text;
+                break; 
+            }
+        } catch (error) {
+            console.error(`❌ Lỗi ở model ${modelName}:`, error);
         }
-    } catch (error) {
-        console.error("Lỗi Chatbot:", error);
-        loadingDiv.remove();
-        appendMessage("Không thể kết nối với trí tuệ nhân tạo. Hãy kiểm tra mạng mạng nè!", 'bot');
+    }
+
+    loadingDiv.remove();
+    
+    // Reset Turnstile cho lần chat kế tiếp
+    try { turnstile.reset(); } catch(e) {}
+
+    if (finalReply) {
+        appendMessage(finalReply, 'bot');
+        chatbotHistory.push({ role: "model", parts: [{ text: finalReply }] });
+    } else {
+        appendMessage("Huhu, server AI của DongDev hiện đang quá tải. Bạn thử lại sau nhé!", 'bot');
+        chatbotHistory.pop();
     }
 }
 
-// Xử lý gửi tin nhắn
+// 5. Hàm xử lý khi người dùng bấm gửi
 function handleChatSubmit() {
-    const text = chatbotInput.value.trim();
-    if (!text) return;
+    try {
+        const text = chatbotInput.value.trim();
+        if (!text) return;
 
-    // ========================================================
-    // 🛡️ CHẶN RATE LIMIT: GIỚI HẠN 10 CÂU CHAT / NGÀY TẠI LOCAL
-    // ========================================================
-    const MAX_CHATS_PER_DAY = 10;
-    const todayStr = new Date().toDateString(); // Định dạng chuỗi ngày cố định (VD: "Tue Jun 09 2026")
-    
-    let savedDate = localStorage.getItem('chatbot_chat_date');
-    let currentChatCount = parseInt(localStorage.getItem('chatbot_chat_count')) || 0;
+        const MAX_CHATS_PER_DAY = 5; 
+        const todayStr = new Date().toDateString(); 
+        let savedDate = localStorage.getItem('chatbot_chat_date');
+        let currentChatCount = parseInt(localStorage.getItem('chatbot_chat_count')) || 0;
 
-    // Kiểm tra xem có phải ngày mới hoàn toàn không
-    if (savedDate !== todayStr) {
-        // Nếu qua ngày mới, đặt lại ngày hôm nay và reset bộ đếm về 0
-        localStorage.setItem('chatbot_chat_date', todayStr);
-        currentChatCount = 0;
-        localStorage.setItem('chatbot_chat_count', currentChatCount);
+        if (savedDate !== todayStr) {
+            localStorage.setItem('chatbot_chat_date', todayStr);
+            currentChatCount = 0;
+            localStorage.setItem('chatbot_chat_count', currentChatCount);
+        }
+
+        if (currentChatCount >= MAX_CHATS_PER_DAY) {
+            alert("Bạn đã dùng hết lượt hỏi hôm nay. Nếu bạn muốn nói chuyện trực tiếp với Đông, hãy điền vào form feedback ở cuối trang chủ hoặc liên hệ qua email johnyduong.vn@gmail.com nhé!"); 
+            return; 
+        }
+
+        localStorage.setItem('chatbot_chat_count', currentChatCount + 1);
+
+        appendMessage(text, 'user'); 
+        chatbotHistory.push({ role: "user", parts: [{ text: text }] });
+
+        chatbotInput.value = ''; 
+        askGemini();
+
+    } catch (error) {
+        console.error("❌ LỖI Ở HÀM XỬ LÝ CLICK GỬI:", error);
     }
-
-    // Nếu đã chạm hoặc vượt ngưỡng giới hạn trong ngày
-    if (currentChatCount >= MAX_CHATS_PER_DAY) {
-        appendMessage("Trợ lý của DongDev tạm thời bận rồi. Hãy quay lại vào ngày mai, hoặc liên hệ trực tiếp với DongDev qua email johnyduong.vn@gmail.com nhé! 🚀", 'bot');
-        chatbotInput.value = ''; // Xóa sạch dữ liệu trong ô nhập
-        return; // Ngăn chặn không cho thực thi tiếp
-    }
-
-    // Cập nhật tăng số lượt chat lên 1 đơn vị và lưu lại
-    localStorage.setItem('chatbot_chat_count', currentChatCount + 1);
-    // ========================================================
-
-    appendMessage(text, 'user');
-    chatbotInput.value = ''; // Xóa ô nhập
-    
-    askGemini(text); // Gửi sang AI xử lý
-}
-
-if (chatbotSendBtn && chatbotInput) {
-    chatbotSendBtn.addEventListener('click', handleChatSubmit);
-    chatbotInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') handleChatSubmit();
-    });
 }
 
 // ==========================================
-// ☀️ THEME TOGGLE (LIGHT / DARK MODE)
+// ☀️ THEME TOGGLE & CLOUDFLARE TURNSTILE
 // ==========================================
 
 const themeToggleBtn = document.getElementById('theme-toggle-btn');
-const currentTheme = localStorage.getItem('theme');
+const currentTheme = localStorage.getItem('theme') || 'light';
+const siteKey = "0x4AAAAAADjcauBl2brzvv7d"; // Thay lại bằng Sitekey thật của bạn
+let turnstileWidgetId = null;
 
-// 1. Kiểm tra xem lần trước người dùng có chọn Dark Mode không
+// 1. Khôi phục giao diện ban đầu khi load trang
 if (currentTheme === 'dark') {
     document.body.classList.add('dark-mode');
-    if (themeToggleBtn) themeToggleBtn.innerText = '☀️'; // Đổi icon sang mặt trời nếu là chế độ tối
+    if (themeToggleBtn) themeToggleBtn.innerText = '☀️';
 }
 
-// 2. Lắng nghe sự kiện click vào nút đổi giao diện
+// 2. Hàm chủ động render lại Turnstile theo theme
+function updateTurnstileTheme(theme) {
+    if (typeof turnstile !== 'undefined') {
+        // Nếu đã có widget cũ thì xóa nó đi
+        if (turnstileWidgetId !== null) {
+            turnstile.remove(turnstileWidgetId);
+        }
+        // Render widget mới toanh với theme phù hợp
+        turnstileWidgetId = turnstile.render('#turnstile-widget', {
+            sitekey: siteKey,
+            theme: theme
+        });
+    }
+}
+
+// 3. Cloudflare sẽ gọi hàm này ngay khi tải xong script API
+window.onloadTurnstileCallback = function () {
+    const initialTheme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
+    updateTurnstileTheme(initialTheme);
+};
+
+// 4. Lắng nghe sự kiện click vào nút đổi giao diện
 if (themeToggleBtn) {
     themeToggleBtn.addEventListener('click', () => {
-        // Toggle class "dark-mode" ở thẻ <body>
         document.body.classList.toggle('dark-mode');
         
-        let theme = 'light';
-        // Nếu body đang có class dark-mode
+        let targetTheme = 'light';
         if (document.body.classList.contains('dark-mode')) {
-            theme = 'dark';
-            themeToggleBtn.innerText = '☀️'; // Gợi ý bấm để chuyển sang Sáng
+            targetTheme = 'dark';
+            themeToggleBtn.innerText = '☀️';
         } else {
-            themeToggleBtn.innerText = '🌙'; // Gợi ý bấm để chuyển sang Tối
+            themeToggleBtn.innerText = '🌙';
         }
         
-        // Lưu lựa chọn vào localStorage để lần sau vào web không bị mất
-        localStorage.setItem('theme', theme);
+        localStorage.setItem('theme', targetTheme);
+        
+        // 🚀 Cập nhật lại Turnstile ngay lập tức
+        updateTurnstileTheme(targetTheme);
     });
 }
