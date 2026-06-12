@@ -194,12 +194,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Bật / Ẩn cửa sổ chat
     if (chatbotToggleBtn && chatbotWindow) {
-        chatbotToggleBtn.addEventListener('click', () => chatbotWindow.classList.toggle('hidden'));
+        chatbotToggleBtn.addEventListener('click', () => {
+            chatbotWindow.classList.toggle('hidden');
+            
+            // 🚀 NẾU MỞ HỘP CHAT: Tiến hành render Turnstile ngay tại thời điểm này
+            if (!chatbotWindow.classList.contains('hidden')) {
+                const currentTheme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
+                updateTurnstileTheme(currentTheme);
+            }
+        });
     }
-    if (chatbotCloseBtn && chatbotWindow) {
-        chatbotCloseBtn.addEventListener('click', () => chatbotWindow.classList.add('hidden'));
-    }
-
     // Gắn sự kiện click và enter
     chatbotSendBtn.addEventListener('click', handleChatSubmit);
     chatbotInput.addEventListener('keypress', (e) => {
@@ -323,13 +327,19 @@ function handleChatSubmit() {
 }
 
 // ==========================================
-// ☀️ THEME TOGGLE & CLOUDFLARE TURNSTILE
+// ☀️ THEME TOGGLE & CLOUDFLARE TURNSTILE (BẢN DEBUG)
 // ==========================================
 
 const themeToggleBtn = document.getElementById('theme-toggle-btn');
 const currentTheme = localStorage.getItem('theme') || 'light';
-const siteKey = "0x4AAAAAADjcauBl2brzvv7d"; // Thay lại bằng Sitekey thật của bạn
+
+// Tự động kiểm tra môi trường
+const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const siteKey = isLocalhost ? "1x00000000000000000000AA" : "0x4AAAAAADjcauBl2brzvv7d"; 
+
 let turnstileWidgetId = null;
+
+console.log(`🤖 Môi trường: ${isLocalhost ? "Localhost (Dùng Key Test)" : "Web thật (Dùng Key Thật)"}`);
 
 // 1. Khôi phục giao diện ban đầu khi load trang
 if (currentTheme === 'dark') {
@@ -337,43 +347,51 @@ if (currentTheme === 'dark') {
     if (themeToggleBtn) themeToggleBtn.innerText = '☀️';
 }
 
-// 2. Hàm chủ động render lại Turnstile theo theme
+// 2. Hàm render Turnstile thông minh
 function updateTurnstileTheme(theme) {
-    if (typeof turnstile !== 'undefined') {
-        // Nếu đã có widget cũ thì xóa nó đi
-        if (turnstileWidgetId !== null) {
-            turnstile.remove(turnstileWidgetId);
-        }
-        // Render widget mới toanh với theme phù hợp
+    const chatbotWindow = document.getElementById('chatbot-window');
+    
+    // Kiểm tra xem hộp chat có đang bị ẩn không
+    if (!chatbotWindow || chatbotWindow.classList.contains('hidden')) {
+        console.log("⚠️ Kháng lệnh render: Hộp chat đang đóng.");
+        return;
+    }
+
+    // Kiểm tra xem Script của Cloudflare đã tải thành công vào web chưa
+    if (typeof turnstile === 'undefined') {
+        console.error("❌ LỖI NGHIÊM TRỌNG: Không tìm thấy đối tượng 'turnstile'. Script của Cloudflare chưa được tải về máy (Do mất mạng hoặc sai vị trí thẻ script)!");
+        return;
+    }
+
+    console.log("🔄 Đang tiến hành vẽ Widget Turnstile...");
+    
+    if (turnstileWidgetId !== null) {
+        try { turnstile.remove(turnstileWidgetId); } catch (e) {}
+    }
+    
+    try {
         turnstileWidgetId = turnstile.render('#turnstile-widget', {
             sitekey: siteKey,
             theme: theme
         });
+        console.log(`✅ Đã nạp Turnstile thành công với giao diện: ${theme}`);
+    } catch (error) {
+        console.error("❌ Lỗi xảy ra trong lúc render:", error);
     }
 }
 
-// 3. Cloudflare sẽ gọi hàm này ngay khi tải xong script API
+// 3. Callback khi API script tải xong
 window.onloadTurnstileCallback = function () {
-    const initialTheme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
-    updateTurnstileTheme(initialTheme);
+    console.log("📡 Script Cloudflare Turnstile đã tải xong và sẵn sàng kích hoạt!");
 };
 
 // 4. Lắng nghe sự kiện click vào nút đổi giao diện
 if (themeToggleBtn) {
     themeToggleBtn.addEventListener('click', () => {
         document.body.classList.toggle('dark-mode');
-        
-        let targetTheme = 'light';
-        if (document.body.classList.contains('dark-mode')) {
-            targetTheme = 'dark';
-            themeToggleBtn.innerText = '☀️';
-        } else {
-            themeToggleBtn.innerText = '🌙';
-        }
-        
+        let targetTheme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
+        themeToggleBtn.innerText = targetTheme === 'dark' ? '☀️' : '🌙';
         localStorage.setItem('theme', targetTheme);
-        
-        // 🚀 Cập nhật lại Turnstile ngay lập tức
         updateTurnstileTheme(targetTheme);
     });
 }
