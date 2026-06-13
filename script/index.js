@@ -192,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    // Bật / Ẩn cửa sổ chat
+    // 1. Bật / Ẩn cửa sổ chat bằng nút chính (Hỏi về Đông?)
     if (chatbotToggleBtn && chatbotWindow) {
         chatbotToggleBtn.addEventListener('click', () => {
             chatbotWindow.classList.toggle('hidden');
@@ -204,7 +204,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-    // Gắn sự kiện click và enter
+
+    // 2. 🚀 BỔ SUNG: Đóng cửa sổ chat khi bấm vào nút X (chatbot-close-btn)
+    if (chatbotCloseBtn && chatbotWindow) {
+        chatbotCloseBtn.addEventListener('click', () => {
+            chatbotWindow.classList.add('hidden'); // Thêm class hidden để ẩn hộp chat đi
+            console.log("🔒 Đã đóng hộp chat bằng nút X.");
+        });
+    }
+        // Gắn sự kiện click và enter
     chatbotSendBtn.addEventListener('click', handleChatSubmit);
     chatbotInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') handleChatSubmit();
