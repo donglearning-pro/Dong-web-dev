@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
     <head>
+        <title>DongDev Portfolio & Blog Ecosystem</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="styles/styles.css">
@@ -235,41 +236,41 @@
         </main>
 
         <section id="contact" class="contact-section">
-    <h2>Get In Touch</h2>
-    <p class="contact-subtitle">Bạn có ý tưởng hay, dự án thú vị hoặc chỉ muốn nói lời chào? Hãy nhắn cho mình nhé!</p>
+            <h2>Get In Touch</h2>
+            <p class="contact-subtitle">Bạn có ý tưởng hay, dự án thú vị hoặc chỉ muốn nói lời chào? Hãy nhắn cho mình nhé!</p>
 
-    <div class="contact-container">
-        <form action="https://api.web3forms.com/submit" method="POST" class="contact-form">
-            <input type="hidden" name="access_key" value="50f899d1-4758-4deb-bb72-4de7e16ff1ff">
+            <div class="contact-container">
+                <form action="https://api.web3forms.com/submit" method="POST" class="contact-form">
+                    <input type="hidden" name="access_key" value="50f899d1-4758-4deb-bb72-4de7e16ff1ff">
 
-            <div class="form-group">
-                <input type="text" name="name" placeholder="Tên của bạn" required>
-            </div>
-            <div class="form-group">
-                <input type="email" name="email" placeholder="Email của bạn" required>
-            </div>
-            <div class="form-group">
-                <textarea name="message" rows="5" placeholder="Lời nhắn gửi tới DongDev..." required></textarea>
-            </div>
-            
-            <input type="hidden" name="from_name" value="DongDev Portfolio">
-            
-            <button type="submit" class="btn-submit">Gửi tin nhắn 🚀</button>
+                    <div class="form-group">
+                        <input type="text" name="name" placeholder="Tên của bạn" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" name="email" placeholder="Email của bạn" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea name="message" rows="5" placeholder="Lời nhắn gửi tới DongDev..." required></textarea>
+                    </div>
+                    
+                    <input type="hidden" name="from_name" value="DongDev Portfolio">
+                    
+                    <button type="submit" class="btn-submit">Gửi tin nhắn 🚀</button>
 
-            <div class="h-captcha" data-captcha="true"></div>
-        </form>
+                    <div class="h-captcha" data-captcha="true"></div>
+                </form>
 
-        <div class="contact-info">
-            <h3>Thông tin liên hệ trực tiếp</h3>
-            <p>Nếu bạn muốn trao đổi qua email, hãy sử dụng địa chỉ bên dưới:</p>
-            <div class="email-box">
-                <span id="email-address">johnyduong.vn@gmail.com</span>
-                <button id="email-btn" class="btn-copy">Copy</button>
+                <div class="contact-info">
+                    <h3>Thông tin liên hệ trực tiếp</h3>
+                    <p>Nếu bạn muốn trao đổi qua email, hãy sử dụng địa chỉ bên dưới:</p>
+                    <div class="email-box">
+                        <span id="email-address">johnyduong.vn@gmail.com</span>
+                        <button id="email-btn" class="btn-copy">Copy</button>
+                    </div>
+                    <p class="copy-status" id="copy-status"></p>
+                </div>
             </div>
-            <p class="copy-status" id="copy-status"></p>
-        </div>
-    </div>
-</section>
+        </section>
 
         <footer class="link">
             <h3>I'm on the Internet!</h3>
@@ -280,41 +281,50 @@
                 <a href="https://www.linkedin.com/in/%C4%91%C3%B4ng-d%C6%B0%C6%A1ng-236a42315/" target="_blank" class="social-item">LinkedIn</a>
             </div>
             <p class="copyright">© 2026 DongDev. All rights reserved.</p>
+            
+            <!-- DMCA Protection Badge -->
+            <div class="dmca-badge-container" style="margin-top: 15px; display: block;">
+                <a href="//www.dmca.com/Protection/Status.aspx?ID=49597ff2-a0da-495b-8790-706abebe31ac" title="DMCA.com Protection Status" class="dmca-badge">
+                    <img src="https://images.dmca.com/Badges/dmca-badge-w100-5x1-06.png?ID=49597ff2-a0da-495b-8790-706abebe31ac" alt="DMCA.com Protection Status" />
+                </a>
+                <script src="https://images.dmca.com/Badges/DMCABadgeHelper.min.js"></script>
+            </div>
         </footer>
 
-<div id="ai-chatbot-container">
-    <button id="chatbot-toggle-btn" aria-label="Chat với trợ lý DongDev">
-        <span class="chat-icon">💬</span>
-        <span class="chat-text">Hỏi về Đông?</span>
-    </button>
+        <div id="ai-chatbot-container">
+            <button id="chatbot-toggle-btn" aria-label="Chat với trợ lý DongDev">
+                <span class="chat-icon">💬</span>
+                <span class="chat-text">Hỏi về Đông?</span>
+            </button>
 
-    <div id="chatbot-window" class="hidden">
-        <div class="chatbot-header">
-            <div class="bot-info">
-                <img src="/assets/index-materials/ouroboros.webp" alt="Bot Logo" class="bot-avatar">
-                <div>
-                    <h4>DongDev Assistant</h4>
-                    <span class="status-online">Đang trực tuyến</span>
+            <div id="chatbot-window" class="hidden">
+                <div class="chatbot-header">
+                    <div class="bot-info">
+                        <img src="/assets/index-materials/ouroboros.webp" alt="Bot Logo" class="bot-avatar">
+                        <div>
+                            <h4>DongDev Assistant</h4>
+                            <span class="status-online">Đang trực tuyến</span>
+                        </div>
+                    </div>
+                    <button id="chatbot-close-btn">&times;</button>
+                </div>
+
+                <div id="chatbot-messages">
+                    <div class="message bot-msg">
+                        Xin chào! Mình là trợ lý ảo của DongDev. Bạn muốn tìm hiểu gì về kỹ năng, dự án hay thành tích của Đông nè? 😊
+                    </div>
+                </div>
+
+                <div id="turnstile-widget" style="padding: 0 10px;"></div>
+                <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback&render=explicit" async defer></script>
+
+                <div class="chatbot-input-area">
+                    <input type="text" id="chatbot-input" placeholder="Nhập tin nhắn..." autocomplete="off">
+                    <button id="chatbot-send-btn">Gửi</button>
                 </div>
             </div>
-            <button id="chatbot-close-btn">&times;</button>
         </div>
-
-        <div id="chatbot-messages">
-            <div class="message bot-msg">
-                Xin chào! Mình là trợ lý ảo của DongDev. Bạn muốn tìm hiểu gì về kỹ năng, dự án hay thành tích của Đông nè? 😊
-            </div>
-        </div>
-
-        <div id="turnstile-widget" style="padding: 0 10px;"></div>
-        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback&render=explicit" async defer></script>
-
-        <div class="chatbot-input-area">
-            <input type="text" id="chatbot-input" placeholder="Nhập tin nhắn..." autocomplete="off">
-            <button id="chatbot-send-btn">Gửi</button>
-        </div>
-    </div>
-</div>
+        
         <script src="/script/index.js"></script>
         <script src="https://web3forms.com/client/script.js" async defer></script>
     </body>

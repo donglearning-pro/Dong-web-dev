@@ -56,7 +56,11 @@ body.dark-mode {
     --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
     --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
 }
-
+/* Thêm đoạn này vào file CSS chung của bạn (style.css hoặc global.css) */
+body.dark-mode .h-captcha {
+    filter: invert(1) hue-rotate(180deg);
+    opacity: 0.85; /* Giảm nhẹ để tiệp vào nền tối của bạn */
+}
 /* ==========================================
    🧱 BASE RESET & GLOBAL STYLES
    ========================================== */

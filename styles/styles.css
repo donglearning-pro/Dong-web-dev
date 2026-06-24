@@ -50,6 +50,11 @@ body.dark-mode {
 
     --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
 }
+/* Thêm đoạn này vào file CSS chung của bạn (style.css hoặc global.css) */
+body.dark-mode .h-captcha {
+    filter: invert(1) hue-rotate(180deg);
+    opacity: 0.85; /* Giảm nhẹ để tiệp vào nền tối của bạn */
+}
 
 /* Base reset and smooth scrolling */
 * {

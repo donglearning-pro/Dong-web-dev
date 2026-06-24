@@ -212,7 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("🔒 Đã đóng hộp chat bằng nút X.");
         });
     }
-        // Gắn sự kiện click và enter
+    // Gắn sự kiện click và enter
     chatbotSendBtn.addEventListener('click', handleChatSubmit);
     chatbotInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') handleChatSubmit();
@@ -400,6 +400,8 @@ if (themeToggleBtn) {
         let targetTheme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
         themeToggleBtn.innerText = targetTheme === 'dark' ? '☀️' : '🌙';
         localStorage.setItem('theme', targetTheme);
+        
+        // Đồng bộ Turnstile của chatbot
         updateTurnstileTheme(targetTheme);
     });
 }
