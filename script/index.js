@@ -371,7 +371,7 @@ function updateTurnstileTheme(theme) {
         return;
     }
 
-    console.log("🔄 Đang tiến hành vẽ Widget Turnstile...");
+    console.log("🔄 Đang tiến hành tạo Widget Turnstile...");
     
     if (turnstileWidgetId !== null) {
         try { turnstile.remove(turnstileWidgetId); } catch (e) {}
