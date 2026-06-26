@@ -111,6 +111,25 @@
             body.dark-mode .teaser-box h4 {
                 color: #38bdf8;
             }
+            
+            /* Style liên kết trong bài viết */
+            .article-content a {
+                color: #0284c7;
+                text-decoration: none;
+                font-weight: 600;
+                border-bottom: 1px dashed #0284c7;
+            }
+            .article-content a:hover {
+                color: #0369a1;
+                border-bottom-style: solid;
+            }
+            body.dark-mode .article-content a {
+                color: #38bdf8;
+                border-bottom-color: #38bdf8;
+            }
+            body.dark-mode .article-content a:hover {
+                color: #7dd3fc;
+            }
         </style>
     </head>
     <body>
@@ -162,6 +181,14 @@
 
                 <h3>Kịch Bản 1: Trái Tim Nhấp Nháy Và Lời Hứa Dở Dang</h3>
                 <p>Khi đã làm chủ được các dòng lệnh cơ bản, việc đầu tiên tôi nghĩ đến là tự định nghĩa một ký tự đặc biệt (Custom Character) không có sẵn trong bảng mã ASCII mặc định của nhà sản xuất. Bằng thuật toán biểu diễn mảng nhị phân 8x8, tôi đã tạo ra hai trạng thái của một trái tim: Trái tim TO đầy đặn và Trái tim NHỎ co lại, rồi cho chúng lặp đi lặp lại để tạo hiệu ứng đập phập phồng.</p>
+                
+                <p>Để đơn giản hóa việc tính toán này thay vì phải tự mò mẫm hay tính toán thủ công từng dòng bit, tôi đã sử dụng một công cụ trực tuyến cực kỳ tiện lợi là website <a href="https://maxpromer.github.io/LCD-Character-Creator/" target="_blank" rel="noopener noreferrer">LCD Character Creator</a>. Công cụ này cho phép chúng ta tự do vẽ hình dáng ký tự mong muốn trực quan trên các ô lưới, hệ thống sẽ tự động chuyển đổi và sinh ra đoạn mã nhị phân (binary) hoặc mã Hex tương ứng một cách nhanh chóng.</p>
+
+                <div class="media-block">
+                    <img src="../assets/blog-materials/lcd-applying/lcd-web.webp" alt="Giao diện website tạo chỉ số hình ảnh LCD tự động">
+                    <div class="media-caption">Giao diện trực quan của website LCD Character Creator khi vẽ và sinh mã mảng nhị phân tự động cho hình trái tim của tôi.</div>
+                </div>
+
                 <p>Màn hình sáng lên dòng chữ <code>DONG ❤ HUYEN</code> với biểu tượng nhịp đập ở giữa. Tôi đã tỉ mẩn viết dòng code này với ý định gửi tặng một người và tạo một bất ngờ nho nhỏ... Nhưng cuộc sống đôi khi không diễn ra theo những kịch bản chúng ban vạch sẵn. Project hoàn thành trơn tru, nhưng cơ hội để gửi trao nó thì đã mãi mãi khép lại. 💔</p>
 
                 <div class="media-block">
@@ -417,24 +444,16 @@ void loop() {
         </main>
 
         <div class="music-widget">
-            
             <button id="musicToggleBtn" class="music-toggle-btn" title="Mở trình phát nhạc">🎶</button>
-            
             <div id="musicPlayerBox" class="floating-player hidden">
-                
                 <button id="minimizeMusicBtn" class="minimize-music-btn" title="Thu nhỏ">✖</button>
-                
                 <p class="player-title">🎧 Dong's Aesthetic Vibes</p>
-                
                 <div class="track-info-container">
                     <div class="track-info-scroller">
-                    <!-- Đổi tên bài hát & tác giả ở đây -->
                     <span class="track-name">🎵 Samuel Kim - I Really Want To Stay At Your House</span>
-                    <!-- Lặp lại chính xác dòng trên thêm 1 lần để chữ chạy thành vòng lặp liên tục -->
                     <span class="track-name">🎵 Samuel Kim - I Really Want To Stay At Your House</span>
                     </div>
                 </div>
-
                 <audio controls loop>
                 <source src="../assets/musics-materials/Samuel_Kim_Lorien_-_I_Really_Want_to_Stay_at_Your_House_(mp3.pm).mp3" type="audio/mpeg">
                     Trình duyệt của bạn không hỗ trợ thẻ audio.
@@ -447,9 +466,7 @@ void loop() {
         </footer>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
-
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/normalize-whitespace/prism-normalize-whitespace.min.js"></script>        
         <script>

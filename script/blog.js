@@ -15,7 +15,7 @@ window.addEventListener('scroll', function() {
     // Lấy tổng chiều cao của trang trừ đi chiều cao của màn hình hiển thị
     let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
     
-    // Tính toán tỷ lệ phần trăm
+    // Tính toán tỷ lệ phần centrum
     let scrolled = (winScroll / height) * 100;
     
     // Cập nhật độ rộng (width) cho thanh tiến trình
@@ -224,7 +224,7 @@ if (musicToggleBtn && musicPlayerBox && minimizeMusicBtn) {
 }
 
 /* ========================================================
-   ⏱️ HÀM TỰ ĐỘNG TÍNH THỜI GIAN ĐỌC BÀI (READING TIME)
+    ⏱️ HÀM TỰ ĐỘNG TÍNH THỜI GIAN ĐỌC BÀI (READING TIME)
 ======================================================== */
 document.addEventListener('DOMContentLoaded', function() {
     

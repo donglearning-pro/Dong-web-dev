@@ -212,7 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("🔒 Đã đóng hộp chat bằng nút X.");
         });
     }
-        // Gắn sự kiện click và enter
+    // Gắn sự kiện click và enter
     chatbotSendBtn.addEventListener('click', handleChatSubmit);
     chatbotInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') handleChatSubmit();
@@ -242,59 +242,51 @@ async function askGemini() {
     chatbotMessages.appendChild(loadingDiv);
     chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
 
-    // Lấy token Turnstile một cách an toàn
     let turnstileToken = "";
-    try {
-        turnstileToken = turnstile.getResponse(); 
-    } catch (e) {
-        console.warn("⚠️ Turnstile chưa sẵn sàng.");
-    }
+    try { turnstileToken = turnstile.getResponse(); } catch (e) {}
 
     if (!turnstileToken) {
         loadingDiv.remove();
         appendMessage("Vui lòng tích vào ô xác thực bảo mật trước khi chat nhé!", "bot");
-        chatbotHistory.pop(); // Xóa câu vừa hỏi lỗi khỏi bộ nhớ AI
+        chatbotHistory.pop(); 
         return;
     }
 
-    let finalReply = null;
+    try {
+        console.log(`🤖 Đang gửi yêu cầu cho Server xử lý...`);
+        
+        // 🌟 Chỉ gọi Server 1 lần duy nhất, không dùng vòng lặp ở đây nữa
+        const response = await fetch(NETLIFY_FUNCTION_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ 
+                contents: chatbotHistory,
+                token: turnstileToken // Truyền token đi 1 lần
+                // Không cần truyền 'model' nữa vì Server tự quyết định
+            }) 
+        });
 
-    for (const modelName of MODEL_FALLBACK_CHAIN) {
-        try {
-            console.log(`🤖 Đang thử kết nối: ${modelName}`);
-            
-            const response = await fetch(NETLIFY_FUNCTION_URL, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ 
-                    contents: chatbotHistory,
-                    model: modelName,
-                    token: turnstileToken
-                }) 
-            });
+        loadingDiv.remove(); // Xóa icon loading
+        try { turnstile.reset(); } catch(e) {} // Reset Captcha ngay lập tức
 
-            if (!response.ok) continue;
-
-            const data = await response.json();
-            if (data.candidates && data.candidates[0].content.parts[0].text) {
-                finalReply = data.candidates[0].content.parts[0].text;
-                break; 
-            }
-        } catch (error) {
-            console.error(`❌ Lỗi ở model ${modelName}:`, error);
+        if (!response.ok) {
+            appendMessage("Huhu, server AI của DongDev hiện đang quá tải. Bạn thử lại sau nhé!", 'bot');
+            chatbotHistory.pop();
+            return;
         }
-    }
 
-    loadingDiv.remove();
-    
-    // Reset Turnstile cho lần chat kế tiếp
-    try { turnstile.reset(); } catch(e) {}
+        const data = await response.json();
+        
+        if (data.candidates && data.candidates[0].content.parts[0].text) {
+            const finalReply = data.candidates[0].content.parts[0].text;
+            appendMessage(finalReply, 'bot');
+            chatbotHistory.push({ role: "model", parts: [{ text: finalReply }] });
+        }
 
-    if (finalReply) {
-        appendMessage(finalReply, 'bot');
-        chatbotHistory.push({ role: "model", parts: [{ text: finalReply }] });
-    } else {
-        appendMessage("Huhu, server AI của DongDev hiện đang quá tải. Bạn thử lại sau nhé!", 'bot');
+    } catch (error) {
+        loadingDiv.remove();
+        try { turnstile.reset(); } catch(e) {}
+        appendMessage("Lỗi mạng rồi! Bạn kiểm tra lại kết nối nhé.", 'bot');
         chatbotHistory.pop();
     }
 }
@@ -371,7 +363,7 @@ function updateTurnstileTheme(theme) {
         return;
     }
 
-    console.log("🔄 Đang tiến hành vẽ Widget Turnstile...");
+    console.log("🔄 Đang tiến hành tạo Widget Turnstile...");
     
     if (turnstileWidgetId !== null) {
         try { turnstile.remove(turnstileWidgetId); } catch (e) {}
@@ -400,6 +392,8 @@ if (themeToggleBtn) {
         let targetTheme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
         themeToggleBtn.innerText = targetTheme === 'dark' ? '☀️' : '🌙';
         localStorage.setItem('theme', targetTheme);
+        
+        // Đồng bộ Turnstile của chatbot
         updateTurnstileTheme(targetTheme);
     });
 }

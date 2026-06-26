@@ -17,6 +17,7 @@ p {
 }
 #message-el {
     font-size: 1.8rem;
+    font-style: italic;
 }
 #startgame {
     background-color: goldenrod;
